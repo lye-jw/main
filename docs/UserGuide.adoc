@@ -91,6 +91,46 @@ Expected output:
 
 *   `Entry deleted: 1. Laksa ($10.50) [Lunch][Food]`
 
+=== Updating a Transaction’s details: `update`
+
+Format: `update i/INDEX | PREFIX_LETTER/UPDATED_DETAILS`
+
+****
+* Updates the Transaction's details at the specified `INDEX`.
+* `PREFIX_LETTER` specifies type of detail to be updated, e.g. `n/` for name.
+* `UPDATED_DETAILS` are the new details of type corresponding to `PREFIX_LETTER` that the Transaction is to be updated with.
+****
+
+Examples:
+
+*   `update i/1 | n/Curry Laksa`
+*   `update i/1 | c/11`
+
+Expected output: +
+** Assume 2nd command occurs after 1st*
+
+*   `Entry name updated: 1. [-] Curry Laksa ($10.50) [Lunch][Food] +
+Original name was: Laksa`
+*   `Entry cost updated: 1. [-] Curry Laksa ($11) [Lunch][Food] +
+Original cost was: $10.50`
+
+=== Cloning a Transaction: `clone`
+
+Format: `clone i/INDEX`
+
+****
+* Clones (creates a duplicate of) a Transaction.
+* Clone produced is added to a new index at the bottom of the list.
+****
+
+Examples:
+
+*   `clone i/1`
+
+Expected output: +
+** Assume entry at index 1 is `1. [-] Laksa ($10.50) [Lunch][Food]` and there are no other entries.*
+
+*   `New entry added: 2. [-] Laksa ($10.50) [Lunch][Food]`
 
 === Generate an external report `[coming in v2.0]`
 
@@ -119,3 +159,7 @@ Example: `add expense n/Laksa c/10.50 t/Lunch t/Food`
 Example: `add income n/Allowance c/1000 t/Monthly`
 * *Delete*: `delete i/INDEX` +
 Example: `delete i/1`
+* *Update*: `update i/INDEX | PREFIX_LETTER/UPDATED_DETAILS` +
+Example: `update i/1 | n/Curry Laksa`
+* *Clone*: `clone i/INDEX` +
+Example: `clone i/1`
