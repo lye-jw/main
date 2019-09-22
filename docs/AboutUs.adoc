@@ -17,4 +17,11 @@ image::limerencee.png[width="150", align="left"]
 Role: Project Manager/Developer +
 Responsibilities: Deliverables and Deadlines
 
+=== Lye Jian Wen
+image::lye-jw.png[width="150", align="left"]
+link:https://https://github.com/lye-jw[[github]] [<<lye-jw#, portfolio>>]
+
+Role: Quality Assurance Manager/Developer +
+Responsibilities: Ensure solution meets user needs and functions correctly
+
 '''
