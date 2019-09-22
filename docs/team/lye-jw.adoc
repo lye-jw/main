@@ -31,9 +31,9 @@
 |_Given below are sections I contributed to the User Guide. They showcase my ability to write documentation targeting end-users._
 |===
 
-//include::../UserGuide.adoc[tag=update]
+include::../UserGuide.adoc[tag=update]
 
-//include::../UserGuide.adoc[tag=clone]
+include::../UserGuide.adoc[tag=clone]
 
 == Contributions to the Developer Guide
 

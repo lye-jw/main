@@ -91,6 +91,7 @@ Expected output:
 
 *   `Entry deleted: 1. Laksa ($10.50) [Lunch][Food]`
 
+// tag::update[]
 === Updating a Transaction’s details: `update`
 
 Format: `update i/INDEX | PREFIX_LETTER/UPDATED_DETAILS`
@@ -113,7 +114,9 @@ Expected output: +
 Original name was: Laksa`
 *   `Entry cost updated: 1. [-] Curry Laksa ($11) [Lunch][Food] +
 Original cost was: $10.50`
+// end::update[]
 
+// tag::clone[]
 === Cloning a Transaction: `clone`
 
 Format: `clone i/INDEX`
@@ -131,6 +134,7 @@ Expected output: +
 ** Assume entry at index 1 is `1. [-] Laksa ($10.50) [Lunch][Food]` and there are no other entries.*
 
 *   `New entry added: 2. [-] Laksa ($10.50) [Lunch][Food]`
+// end::clone[]
 
 === Generate an external report `[coming in v2.0]`
 
