@@ -101,7 +101,7 @@ Expected output:
 [[UpdateTag]]
 === Updating a transaction’s details: `update`
 
-Format: `update i/INDEX | PREFIX_LETTER/UPDATED_DETAILS`
+Format: `update i/INDEX PREFIX_LETTER/UPDATED_DETAILS`
 
 ****
 * Updates the transaction's details at the specified `INDEX`.
@@ -112,8 +112,8 @@ Format: `update i/INDEX | PREFIX_LETTER/UPDATED_DETAILS`
 
 Examples:
 
-*   `update i/1 | n/Curry Laksa`
-*   `update i/1 | c/11`
+*   `update i/1 n/Curry Laksa`
+*   `update i/1 c/11`
 
 Expected output: +
 
@@ -330,8 +330,8 @@ Example: `add_expense n/Laksa c/10.50 t/Lunch t/Food`
 Example: `add_income n/Allowance c/1000 t/Monthly`
 * <<DeleteTag, *Delete*>>: `delete i/INDEX` +
 Example: `delete i/1`
-* <<UpdateTag, *Update*>>: `update i/INDEX | PREFIX_LETTER/UPDATED_DETAILS` +
-Example: `update i/1 | n/Curry Laksa`
+* <<UpdateTag, *Update*>>: `update i/INDEX PREFIX_LETTER/UPDATED_DETAILS` +
+Example: `update i/1 n/Curry Laksa`
 * <<CloneTag, *Clone*>>: `clone i/INDEX` +
 Example: `clone i/1`
 * <<ListTag, *List*>>: `list [m/MONTH] [t/TAG]` +

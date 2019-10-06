@@ -9,21 +9,21 @@ import org.junit.jupiter.api.Test;
 
 import thrift.commons.core.index.Index;
 import thrift.logic.commands.CommandTestUtil;
-import thrift.logic.commands.EditCommand;
-import thrift.logic.commands.EditCommand.EditTransactionDescriptor;
+import thrift.logic.commands.UpdateCommand;
+import thrift.logic.commands.UpdateCommand.UpdateTransactionDescriptor;
 //import thrift.model.tag.Tag;
 //import thrift.model.transaction.Value;
-import thrift.testutil.EditTransactionDescriptorBuilder;
+import thrift.testutil.UpdateTransactionDescriptorBuilder;
 import thrift.testutil.TypicalIndexes;
 
-public class EditCommandParserTest {
+public class UpdateCommandParserTest {
 
     private static final String TAG_EMPTY = " " + CliSyntax.PREFIX_TAG;
 
     private static final String MESSAGE_INVALID_FORMAT =
-            String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE);
+            String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateCommand.MESSAGE_USAGE);
 
-    private EditCommandParser parser = new EditCommandParser();
+    private UpdateCommandParser parser = new UpdateCommandParser();
 
     @Test
     public void parse_missingParts_failure() {
@@ -31,7 +31,7 @@ public class EditCommandParserTest {
         assertParseFailure(parser, CommandTestUtil.VALID_DESCRIPTION_LAKSA, MESSAGE_INVALID_FORMAT);
 
         // no field specified
-        assertParseFailure(parser, "1", EditCommand.MESSAGE_NOT_EDITED);
+        assertParseFailure(parser, "1", UpdateCommand.MESSAGE_NOT_UPDATED);
 
         // no index and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
@@ -69,7 +69,7 @@ public class EditCommandParserTest {
         assertParseFailure(parser, "1"
                 + CommandTestUtil.VALUE_LAKSA + CommandTestUtil.INVALID_VALUE, Value.VALUE_CONSTRAINTS);
 
-        // while parsing {@code PREFIX_TAG} alone will reset the tags of the {@code Transaction} being edited,
+        // while parsing {@code PREFIX_TAG} alone will reset the tags of the {@code Transaction} being updated,
         // parsing it together with a valid tag results in error
         assertParseFailure(parser, "1"
                 + CommandTestUtil.TAG_LAKSA + CommandTestUtil.TAG_BRUNCH
@@ -88,7 +88,7 @@ public class EditCommandParserTest {
 
     @Test
     public void parse_allFieldsSpecified_success() {
-        assertDoesNotThrow(() -> new EditTransactionDescriptorBuilder()
+        assertDoesNotThrow(() -> new UpdateTransactionDescriptorBuilder()
                 .withDescription(CommandTestUtil.VALID_DESCRIPTION_AIRPODS)
                 .withValue(CommandTestUtil.VALID_VALUE_AIRPODS)
                 .withTags(CommandTestUtil.VALID_TAG_ACCESSORY).build());
@@ -102,9 +102,9 @@ public class EditCommandParserTest {
         String userInput = targetIndex.getOneBased() + CommandTestUtil.DESC_LAKSA + CommandTestUtil.VALUE_LAKSA
                 + CommandTestUtil.TAG_LAKSA;
 
-        EditCommand.EditTransactionDescriptor descriptor = new EditTransactionDescriptorBuilder()
+        UpdateCommand.UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder()
                 .withValue(CommandTestUtil.VALUE_AIRPODS).build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        UpdateCommand expectedCommand = new UpdateCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
@@ -119,17 +119,17 @@ public class EditCommandParserTest {
                 + CommandTestUtil.TAG_LAKSA;
 
         // description
-        EditTransactionDescriptor descriptor = new EditTransactionDescriptorBuilder()
+        UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder()
                 .withDescription(CommandTestUtil.VALID_DESCRIPTION_AIRPODS).build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        UpdateCommand expectedCommand = new UpdateCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
         // tags
         userInput = targetIndex.getOneBased() + CommandTestUtil.DESC_LAKSA + CommandTestUtil.VALUE_LAKSA
                 + CommandTestUtil.TAG_LAKSA;
-        descriptor = new EditTransactionDescriptorBuilder()
+        descriptor = new UpdateTransactionDescriptorBuilder()
                 .withTags(CommandTestUtil.VALID_TAG_ACCESSORY).build();
-        expectedCommand = new EditCommand(targetIndex, descriptor);
+        expectedCommand = new UpdateCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
     }
      */
@@ -143,11 +143,11 @@ public class EditCommandParserTest {
                 + CommandTestUtil.DESC_AIRPODS + CommandTestUtil.VALUE_AIRPODS
                 + CommandTestUtil.TAG_AIRPODS;
 
-        EditCommand.EditTransactionDescriptor descriptor = new EditTransactionDescriptorBuilder()
+        UpdateCommand.UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder()
                 .withValue(CommandTestUtil.VALID_VALUE_AIRPODS)
                 .withTags(CommandTestUtil.VALID_TAG_ACCESSORY, CommandTestUtil.VALID_TAG_LUNCH)
                 .build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        UpdateCommand expectedCommand = new UpdateCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
@@ -160,18 +160,18 @@ public class EditCommandParserTest {
         Index targetIndex = TypicalIndexes.INDEX_FIRST_TRANSACTION;
         String userInput = targetIndex.getOneBased()
                 + CommandTestUtil.INVALID_VALUE + CommandTestUtil.VALUE_AIRPODS;
-        EditCommand.EditTransactionDescriptor descriptor = new EditTransactionDescriptorBuilder()
+        UpdateCommand.UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder()
                 .withValue(CommandTestUtil.VALID_VALUE_AIRPODS).build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        UpdateCommand expectedCommand = new UpdateCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
 
         // other valid values specified
         userInput = targetIndex.getOneBased() + CommandTestUtil.DESC_LAKSA
                 + CommandTestUtil.INVALID_VALUE + CommandTestUtil.VALUE_LAKSA;
-        descriptor = new EditTransactionDescriptorBuilder()
+        descriptor = new UpdateTransactionDescriptorBuilder()
                 .withValue(CommandTestUtil.VALID_VALUE_LAKSA)
                 .build();
-        expectedCommand = new EditCommand(targetIndex, descriptor);
+        expectedCommand = new UpdateCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
     }
      */
@@ -181,8 +181,8 @@ public class EditCommandParserTest {
         Index targetIndex = TypicalIndexes.INDEX_THIRD_TRANSACTION;
         String userInput = targetIndex.getOneBased() + TAG_EMPTY;
 
-        EditTransactionDescriptor descriptor = new EditTransactionDescriptorBuilder().withTags().build();
-        EditCommand expectedCommand = new EditCommand(targetIndex, descriptor);
+        UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder().withTags().build();
+        UpdateCommand expectedCommand = new UpdateCommand(targetIndex, descriptor);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }

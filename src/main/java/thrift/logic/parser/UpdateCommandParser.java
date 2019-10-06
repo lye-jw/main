@@ -9,21 +9,21 @@ import java.util.Optional;
 import java.util.Set;
 
 import thrift.commons.core.index.Index;
-import thrift.logic.commands.EditCommand;
+import thrift.logic.commands.UpdateCommand;
 import thrift.logic.parser.exceptions.ParseException;
 import thrift.model.tag.Tag;
 
 /**
- * Parses input arguments and creates a new EditCommand object
+ * Parses input arguments and creates a new UpdateCommand object
  */
-public class EditCommandParser implements Parser<EditCommand> {
+public class UpdateCommandParser implements Parser<UpdateCommand> {
 
     /**
-     * Parses the given {@code String} of arguments in the context of the EditCommand
-     * and returns an EditCommand object for execution.
+     * Parses the given {@code String} of arguments in the context of the UpdateCommand
+     * and returns an UpdateCommand object for execution.
      * @throws ParseException if the user input does not conform the expected format
      */
-    public EditCommand parse(String args) throws ParseException {
+    public UpdateCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_COST, CliSyntax.PREFIX_TAG);
@@ -33,23 +33,23 @@ public class EditCommandParser implements Parser<EditCommand> {
         try {
             index = ParserUtil.parseIndex(argMultimap.getPreamble());
         } catch (ParseException pe) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditCommand.MESSAGE_USAGE), pe);
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateCommand.MESSAGE_USAGE), pe);
         }
 
-        EditCommand.EditTransactionDescriptor editTransactionDescriptor = new EditCommand.EditTransactionDescriptor();
+        UpdateCommand.UpdateTransactionDescriptor updateTransactionDescriptor = new UpdateCommand.UpdateTransactionDescriptor();
         /*
         * Uncomment and edit to make it suitable for updating Description and possibly Cost.
         if (argMultimap.getValue(CliSyntax.PREFIX_NAME).isPresent()) {
-            editTransactionDescriptor.setDescription(ParserUtil.parseDescription(
+            updateTransactionDescriptor.setDescription(ParserUtil.parseDescription(
                 argMultimap.getValue(CliSyntax.PREFIX_NAME).get()));
         }*/
-        parseTagsForEdit(argMultimap.getAllValues(CliSyntax.PREFIX_TAG)).ifPresent(editTransactionDescriptor::setTags);
+        parseTagsForUpdate(argMultimap.getAllValues(CliSyntax.PREFIX_TAG)).ifPresent(updateTransactionDescriptor::setTags);
 
-        if (!editTransactionDescriptor.isAnyFieldEdited()) {
-            throw new ParseException(EditCommand.MESSAGE_NOT_EDITED);
+        if (!updateTransactionDescriptor.isAnyFieldUpdated()) {
+            throw new ParseException(UpdateCommand.MESSAGE_NOT_UPDATED);
         }
 
-        return new EditCommand(index, editTransactionDescriptor);
+        return new UpdateCommand(index, updateTransactionDescriptor);
     }
 
     /**
@@ -57,7 +57,7 @@ public class EditCommandParser implements Parser<EditCommand> {
      * If {@code tags} contain only one element which is an empty string, it will be parsed into a
      * {@code Set<Tag>} containing zero tags.
      */
-    private Optional<Set<Tag>> parseTagsForEdit(Collection<String> tags) throws ParseException {
+    private Optional<Set<Tag>> parseTagsForUpdate(Collection<String> tags) throws ParseException {
         assert tags != null;
 
         if (tags.isEmpty()) {

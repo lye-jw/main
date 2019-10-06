@@ -17,7 +17,7 @@ import thrift.model.Model;
 import thrift.model.Thrift;
 import thrift.model.transaction.DescriptionContainsKeywordsPredicate;
 import thrift.model.transaction.Transaction;
-import thrift.testutil.EditTransactionDescriptorBuilder;
+import thrift.testutil.UpdateTransactionDescriptorBuilder;
 
 /**
  * Contains helper methods for testing commands.
@@ -49,14 +49,14 @@ public class CommandTestUtil {
     public static final String PREAMBLE_WHITESPACE = "\t  \r  \n";
     public static final String PREAMBLE_NON_EMPTY = "NonEmptyPreamble";
 
-    public static final EditCommand.EditTransactionDescriptor DESC_MEAL;
-    public static final EditCommand.EditTransactionDescriptor DESC_PURCHASE;
+    public static final UpdateCommand.UpdateTransactionDescriptor DESC_MEAL;
+    public static final UpdateCommand.UpdateTransactionDescriptor DESC_PURCHASE;
 
     static {
-        DESC_MEAL = new EditTransactionDescriptorBuilder().withDescription(VALID_DESCRIPTION_LAKSA)
+        DESC_MEAL = new UpdateTransactionDescriptorBuilder().withDescription(VALID_DESCRIPTION_LAKSA)
                 .withValue(VALID_VALUE_LAKSA).withDate(VALID_DATE_LAKSA).withTags(VALID_TAG_LUNCH).build();
 
-        DESC_PURCHASE = new EditTransactionDescriptorBuilder().withDescription(VALID_DESCRIPTION_AIRPODS)
+        DESC_PURCHASE = new UpdateTransactionDescriptorBuilder().withDescription(VALID_DESCRIPTION_AIRPODS)
                 .withValue(VALID_VALUE_AIRPODS).withDate(VALID_DATE_AIRPODS).withTags(VALID_TAG_ACCESSORY).build();
     }
 
