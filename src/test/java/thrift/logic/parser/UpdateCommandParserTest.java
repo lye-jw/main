@@ -28,10 +28,10 @@ public class UpdateCommandParserTest {
     @Test
     public void parse_missingParts_failure() {
         // no index specified
-        assertParseFailure(parser, CommandTestUtil.VALID_DESCRIPTION_LAKSA, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, CommandTestUtil.DESC_LAKSA, MESSAGE_INVALID_FORMAT);
 
         // no field specified
-        assertParseFailure(parser, "1", UpdateCommand.MESSAGE_NOT_UPDATED);
+        assertParseFailure(parser, String.format(CommandTestUtil.INDEX_TOKEN + "1"), UpdateCommand.MESSAGE_NOT_UPDATED);
 
         // no index and no field specified
         assertParseFailure(parser, "", MESSAGE_INVALID_FORMAT);
@@ -40,16 +40,18 @@ public class UpdateCommandParserTest {
     @Test
     public void parse_invalidPreamble_failure() {
         // negative index
-        assertParseFailure(parser, "-5" + CommandTestUtil.DESC_LAKSA, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "-5"
+                + CommandTestUtil.DESC_LAKSA, MESSAGE_INVALID_FORMAT);
 
         // zero index
-        assertParseFailure(parser, "0" + CommandTestUtil.DESC_LAKSA, MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "0"
+                + CommandTestUtil.DESC_LAKSA, MESSAGE_INVALID_FORMAT);
 
         // invalid arguments being parsed as preamble
-        assertParseFailure(parser, "1 some random string", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "1 some random string", MESSAGE_INVALID_FORMAT);
 
         // invalid prefix being parsed as preamble
-        assertParseFailure(parser, "1 i/ string", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "1 i/ string", MESSAGE_INVALID_FORMAT);
     }
 
     /* TODO: Repair test case
@@ -179,7 +181,7 @@ public class UpdateCommandParserTest {
     @Test
     public void parse_resetTags_success() {
         Index targetIndex = TypicalIndexes.INDEX_THIRD_TRANSACTION;
-        String userInput = targetIndex.getOneBased() + TAG_EMPTY;
+        String userInput = CommandTestUtil.INDEX_TOKEN + targetIndex.getOneBased() + TAG_EMPTY;
 
         UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder().withTags().build();
         UpdateCommand expectedCommand = new UpdateCommand(targetIndex, descriptor);

@@ -58,7 +58,7 @@ public class ThriftParserTest {
         Expense expense = new ExpenseBuilder().build();
         UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder(expense).build();
         assertDoesNotThrow(() -> (UpdateCommand) parser.parseCommand(UpdateCommand.COMMAND_WORD
-                + " " + TypicalIndexes.INDEX_FIRST_TRANSACTION.getOneBased() + " "
+                + " " + CliSyntax.PREFIX_INDEX + TypicalIndexes.INDEX_FIRST_TRANSACTION.getOneBased() + " "
                 + TransactionUtil.getUpdateTransactionDescriptorDetails(descriptor)));
     }
 
