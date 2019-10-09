@@ -507,7 +507,18 @@ Priorities: High (must have) - `* * \*`, Medium (nice to have) - `* \*`, Low (un
 |NUS student with stingy and over-controlling parents
 |send my expense report for the month to my parents to view easily
 |avoid them asking me what I have been spending on all the time
+
+|`*`
+|NUS student whose transaction details may be inaccurate in retrospect due to cashbacks or receipt discrepancies
+|modify transactions in my list
+|transactions have the most updated and accurate information
+
+|`*`
+|NUS student with completely or almost identical repeated transactions
+|make copies of such transactions
+|more convenient to add them instead of having to type them out fully each time
 |=======================================================================
+
 
 [appendix]
 == Use Cases
