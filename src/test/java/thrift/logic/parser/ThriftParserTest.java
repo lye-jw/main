@@ -16,19 +16,19 @@ import org.junit.jupiter.api.Test;
 import thrift.logic.commands.AddExpenseCommand;
 import thrift.logic.commands.ClearCommand;
 import thrift.logic.commands.DeleteCommand;
-import thrift.logic.commands.UpdateCommand;
-import thrift.logic.commands.UpdateCommand.UpdateTransactionDescriptor;
 import thrift.logic.commands.ExitCommand;
 import thrift.logic.commands.FindCommand;
 import thrift.logic.commands.HelpCommand;
 import thrift.logic.commands.ListCommand;
+import thrift.logic.commands.UpdateCommand;
+import thrift.logic.commands.UpdateCommand.UpdateTransactionDescriptor;
 import thrift.logic.parser.exceptions.ParseException;
 import thrift.model.transaction.DescriptionContainsKeywordsPredicate;
 import thrift.model.transaction.Expense;
-import thrift.testutil.UpdateTransactionDescriptorBuilder;
 import thrift.testutil.ExpenseBuilder;
 import thrift.testutil.TransactionUtil;
 import thrift.testutil.TypicalIndexes;
+import thrift.testutil.UpdateTransactionDescriptorBuilder;
 
 public class ThriftParserTest {
 

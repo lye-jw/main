@@ -2,7 +2,10 @@ package thrift.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static thrift.logic.parser.CliSyntax.*;
+import static thrift.logic.parser.CliSyntax.PREFIX_COST;
+import static thrift.logic.parser.CliSyntax.PREFIX_INDEX;
+import static thrift.logic.parser.CliSyntax.PREFIX_NAME;
+import static thrift.logic.parser.CliSyntax.PREFIX_TAG;
 import static thrift.testutil.Assert.assertThrows;
 
 import java.util.ArrayList;

@@ -16,13 +16,13 @@ import thrift.model.Thrift;
 import thrift.model.UserPrefs;
 import thrift.model.transaction.Expense;
 import thrift.model.transaction.Transaction;
-import thrift.testutil.UpdateTransactionDescriptorBuilder;
 import thrift.testutil.ExpenseBuilder;
 import thrift.testutil.TypicalIndexes;
 import thrift.testutil.TypicalTransactions;
+import thrift.testutil.UpdateTransactionDescriptorBuilder;
 
 /**
- * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for UpdateCommand.
+ * Contains integration tests (interaction with the Model, UndoCommand and RedoCommand) and unit tests for UpdateCommand
  */
 public class UpdateCommandTest {
 
@@ -106,7 +106,8 @@ public class UpdateCommandTest {
                 .withDescription(CommandTestUtil.VALID_DESCRIPTION_LAKSA).build();
         UpdateCommand updateCommand = new UpdateCommand(outOfBoundIndex, descriptor);
 
-        CommandTestUtil.assertCommandFailure(updateCommand, model, Messages.MESSAGE_INVALID_TRANSACTION_DISPLAYED_INDEX);
+        CommandTestUtil.assertCommandFailure(updateCommand, model,
+                Messages.MESSAGE_INVALID_TRANSACTION_DISPLAYED_INDEX);
     }
 
     /**
@@ -124,7 +125,8 @@ public class UpdateCommandTest {
                 new UpdateTransactionDescriptorBuilder().withDescription(CommandTestUtil.VALID_DESCRIPTION_LAKSA)
                         .build());
 
-        CommandTestUtil.assertCommandFailure(updateCommand, model, Messages.MESSAGE_INVALID_TRANSACTION_DISPLAYED_INDEX);
+        CommandTestUtil.assertCommandFailure(updateCommand, model,
+                Messages.MESSAGE_INVALID_TRANSACTION_DISPLAYED_INDEX);
     }
 
     @Test

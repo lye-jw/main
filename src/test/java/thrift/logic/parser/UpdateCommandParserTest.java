@@ -13,8 +13,8 @@ import thrift.logic.commands.UpdateCommand;
 import thrift.logic.commands.UpdateCommand.UpdateTransactionDescriptor;
 //import thrift.model.tag.Tag;
 //import thrift.model.transaction.Value;
-import thrift.testutil.UpdateTransactionDescriptorBuilder;
 import thrift.testutil.TypicalIndexes;
+import thrift.testutil.UpdateTransactionDescriptorBuilder;
 
 public class UpdateCommandParserTest {
 

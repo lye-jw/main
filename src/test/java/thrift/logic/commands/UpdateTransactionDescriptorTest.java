@@ -30,7 +30,8 @@ public class UpdateTransactionDescriptorTest {
         assertFalse(CommandTestUtil.DESC_MEAL.equals(CommandTestUtil.DESC_PURCHASE));
 
         // different description -> returns false
-        UpdateTransactionDescriptor updatedTransaction = new UpdateTransactionDescriptorBuilder(CommandTestUtil.DESC_MEAL)
+        UpdateTransactionDescriptor updatedTransaction =
+                new UpdateTransactionDescriptorBuilder(CommandTestUtil.DESC_MEAL)
                 .withDescription(CommandTestUtil.VALID_DESCRIPTION_AIRPODS).build();
         assertFalse(CommandTestUtil.DESC_MEAL.equals(updatedTransaction));
 
