@@ -26,7 +26,8 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
     public UpdateCommand parse(String args) throws ParseException {
         requireNonNull(args);
         ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_COST, CliSyntax.PREFIX_TAG);
+                ArgumentTokenizer.tokenize(args, CliSyntax.PREFIX_INDEX, CliSyntax.PREFIX_NAME, CliSyntax.PREFIX_COST,
+                        CliSyntax.PREFIX_TAG);
 
         Index index;
 
@@ -36,14 +37,21 @@ public class UpdateCommandParser implements Parser<UpdateCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, UpdateCommand.MESSAGE_USAGE), pe);
         }
 
-        UpdateCommand.UpdateTransactionDescriptor updateTransactionDescriptor = new UpdateCommand.UpdateTransactionDescriptor();
-        /*
-        * Uncomment and edit to make it suitable for updating Description and possibly Cost.
+        UpdateCommand.UpdateTransactionDescriptor updateTransactionDescriptor =
+                new UpdateCommand.UpdateTransactionDescriptor();
+
         if (argMultimap.getValue(CliSyntax.PREFIX_NAME).isPresent()) {
             updateTransactionDescriptor.setDescription(ParserUtil.parseDescription(
                 argMultimap.getValue(CliSyntax.PREFIX_NAME).get()));
-        }*/
-        parseTagsForUpdate(argMultimap.getAllValues(CliSyntax.PREFIX_TAG)).ifPresent(updateTransactionDescriptor::setTags);
+        }
+
+        if (argMultimap.getValue(CliSyntax.PREFIX_COST).isPresent()) {
+            updateTransactionDescriptor.setValue(ParserUtil.parseValue(
+                    argMultimap.getValue(CliSyntax.PREFIX_COST).get()));
+        }
+
+        parseTagsForUpdate(argMultimap.getAllValues(CliSyntax.PREFIX_TAG))
+                .ifPresent(updateTransactionDescriptor::setTags);
 
         if (!updateTransactionDescriptor.isAnyFieldUpdated()) {
             throw new ParseException(UpdateCommand.MESSAGE_NOT_UPDATED);

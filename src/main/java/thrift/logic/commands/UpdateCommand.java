@@ -32,7 +32,7 @@ public class UpdateCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Updates the details of the transaction identified "
             + "by the index number used in the displayed transaction list. "
             + "Existing values will be overwritten by the input values.\n"
-            + "Parameters: INDEX (must be a positive integer) "
+            + "Parameters: " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_NAME + "NAME DESCRIPTION] "
             + "[" + CliSyntax.PREFIX_COST + "COST] "
             + "[" + CliSyntax.PREFIX_TAG + "TAG]...\n"
