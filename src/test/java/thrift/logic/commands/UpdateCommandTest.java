@@ -31,23 +31,17 @@ public class UpdateCommandTest {
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
-        // Create initial Expense from first element in TypicalTransactions' list, to reflect original transaction after
-        // updating (UpdateCommandTest private class attribute) model's first item.
-        Expense updatedExpense = new ExpenseBuilder(model.getFilteredTransactionList().get(0))
-                // .withTags(model.getFilteredTransactionList().get(0).getTags().iterator().next().tagName)
-                .build();
-        String expectedMessageOriginal = String.format(UpdateCommand.MESSAGE_ORIGINAL_TRANSACTION, updatedExpense);
+        Expense updatedExpense = new ExpenseBuilder().build();
         UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder(updatedExpense).build();
         UpdateCommand updateCommand = new UpdateCommand(TypicalIndexes.INDEX_FIRST_TRANSACTION, descriptor);
 
-        String expectedMessageUpdated = String.format(UpdateCommand.MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedExpense);
+        String expectedMessage = String.format(UpdateCommand.MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedExpense);
 
         Model expectedModel = new ModelManager(new Thrift(model.getThrift()), new UserPrefs(),
                 new PastUndoableCommands());
         expectedModel.setTransaction(model.getFilteredTransactionList().get(0), updatedExpense);
 
-        assertCommandSuccess(updateCommand, model, expectedMessageUpdated + expectedMessageOriginal,
-                expectedModel);
+        assertCommandSuccess(updateCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -55,20 +49,18 @@ public class UpdateCommandTest {
         Index indexLastTransaction = Index.fromOneBased(model.getFilteredTransactionList().size());
         Transaction lastTransaction = model.getFilteredTransactionList().get(indexLastTransaction.getZeroBased());
 
-        Expense updatedTransaction = new ExpenseBuilder(lastTransaction).build();
-        String expectedMessageOriginal = String.format(UpdateCommand.MESSAGE_ORIGINAL_TRANSACTION, updatedTransaction);
+        Expense updatedTransaction = new ExpenseBuilder().build();
         UpdateTransactionDescriptor descriptor = new UpdateTransactionDescriptorBuilder(updatedTransaction)
                .build();
         UpdateCommand updateCommand = new UpdateCommand(indexLastTransaction, descriptor);
 
-        String expectedMessageUpdated = String.format(UpdateCommand.MESSAGE_UPDATE_TRANSACTION_SUCCESS,
-                updatedTransaction);
+        String expectedMessage = String.format(UpdateCommand.MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedTransaction);
 
         Model expectedModel = new ModelManager(new Thrift(model.getThrift()), new UserPrefs(),
                 new PastUndoableCommands());
         expectedModel.setTransaction(lastTransaction, updatedTransaction);
 
-        assertCommandSuccess(updateCommand, model, expectedMessageUpdated + expectedMessageOriginal, expectedModel);
+        assertCommandSuccess(updateCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -78,14 +70,12 @@ public class UpdateCommandTest {
         Transaction updatedTransaction = model.getFilteredTransactionList()
                 .get(TypicalIndexes.INDEX_FIRST_TRANSACTION.getZeroBased());
 
-        String expectedMessageUpdated = String.format(UpdateCommand.MESSAGE_UPDATE_TRANSACTION_SUCCESS,
-                updatedTransaction);
-        String expectedMessageOriginal = String.format(UpdateCommand.MESSAGE_ORIGINAL_TRANSACTION, updatedTransaction);
+        String expectedMessage = String.format(UpdateCommand.MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedTransaction);
 
         Model expectedModel = new ModelManager(new Thrift(model.getThrift()), new UserPrefs(),
                 new PastUndoableCommands());
 
-        assertCommandSuccess(updateCommand, model, expectedMessageUpdated + expectedMessageOriginal, expectedModel);
+        assertCommandSuccess(updateCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
@@ -96,18 +86,17 @@ public class UpdateCommandTest {
                 TypicalIndexes.INDEX_FIRST_TRANSACTION.getZeroBased());
         Transaction updatedPerson = new ExpenseBuilder(transactionInFilteredList)
                 .withDescription(CommandTestUtil.VALID_DESCRIPTION_LAKSA).build();
-        String expectedMessageOriginal = String.format(UpdateCommand.MESSAGE_ORIGINAL_TRANSACTION, updatedPerson);
         UpdateCommand updateCommand = new UpdateCommand(TypicalIndexes.INDEX_FIRST_TRANSACTION,
                 new UpdateTransactionDescriptorBuilder().withDescription(CommandTestUtil.VALID_DESCRIPTION_LAKSA)
                         .build());
 
-        String expectedMessageUpdated = String.format(UpdateCommand.MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedPerson);
+        String expectedMessage = String.format(UpdateCommand.MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedPerson);
 
         Model expectedModel = new ModelManager(new Thrift(model.getThrift()), new UserPrefs(),
                 new PastUndoableCommands());
         expectedModel.setTransaction(model.getFilteredTransactionList().get(0), updatedPerson);
 
-        assertCommandSuccess(updateCommand, model, expectedMessageUpdated + expectedMessageOriginal, expectedModel);
+        assertCommandSuccess(updateCommand, model, expectedMessage, expectedModel);
     }
 
     @Test
