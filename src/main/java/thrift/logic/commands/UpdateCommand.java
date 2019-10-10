@@ -80,7 +80,7 @@ public class UpdateCommand extends Command {
      * updated with {@code updateTransactionDescriptor}.
      */
     private static Transaction createUpdatedTransaction(Transaction transactionToUpdate,
-                                                       UpdateTransactionDescriptor updateTransactionDescriptor) {
+                                                        UpdateTransactionDescriptor updateTransactionDescriptor) {
         assert transactionToUpdate != null;
 
         Description updatedDescription = updateTransactionDescriptor.getDescription()
