@@ -2,12 +2,9 @@ package thrift.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 
-import java.util.List;
-
 import thrift.logic.parser.CliSyntax;
 import thrift.model.Model;
 import thrift.model.transaction.Expense;
-import thrift.model.transaction.Transaction;
 
 /**
  * Adds an expense transaction to the THRIFT.
@@ -20,10 +17,12 @@ public class AddExpenseCommand extends Command implements Undoable {
             + "Parameters: "
             + CliSyntax.PREFIX_NAME + "NAME DESCRIPTION "
             + CliSyntax.PREFIX_COST + "COST "
+            + "[" + CliSyntax.PREFIX_REMARK + "REMARK] "
             + "[" + CliSyntax.PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
             + CliSyntax.PREFIX_NAME + "Laksa "
             + CliSyntax.PREFIX_COST + "4.50 "
+            + CliSyntax.PREFIX_REMARK + "Ate at Changi Village "
             + CliSyntax.PREFIX_TAG + "Lunch "
             + CliSyntax.PREFIX_TAG + "Meal ";
 
@@ -55,8 +54,13 @@ public class AddExpenseCommand extends Command implements Undoable {
 
     @Override
     public void undo(Model model) {
-        List<Transaction> lastShownList = model.getThrift().getTransactionList();
-        Transaction transactionToDelete = lastShownList.get(lastShownList.size() - 1);
-        model.deleteTransaction(transactionToDelete);
+        requireNonNull(model);
+        model.deleteLastTransaction();
+    }
+
+    @Override
+    public void redo(Model model) {
+        requireNonNull(model);
+        model.addExpense(toAdd);
     }
 }

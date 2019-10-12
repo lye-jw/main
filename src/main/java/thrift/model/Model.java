@@ -1,6 +1,7 @@
 package thrift.model;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Predicate;
 
 import javafx.collections.ObservableList;
@@ -62,10 +63,23 @@ public interface Model {
     boolean hasTransaction(Transaction transaction);
 
     /**
+     * Returns an Optional that contains the {@link Index} of the {@code transaction}.
+     *
+     * @param transaction is the transaction that you are interested in its index in the full transaction list.
+     * @return an Optional containing the index of the transaction.
+     */
+    Optional<Index> getIndexInFullTransactionList(Transaction transaction);
+
+    /**
      * Deletes the given transaction.
      * The transaction must exist in the transactions list.
      */
     void deleteTransaction(Transaction transaction);
+
+    /**
+     * Deletes the last transaction in the full transaction list.
+     */
+    void deleteLastTransaction();
 
     /**
      * Adds the given expense.
@@ -92,6 +106,14 @@ public interface Model {
      * {@code target} must exist in the transactions list.
      */
     void setTransaction(Transaction target, Transaction updatedTransaction);
+
+    /**
+     * Gets the last transaction from thrift's transaction list
+     *
+     * @return the last transaction from thrift's transaction list
+     */
+    Transaction getLastTransactionFromThrift();
+
 
     /** Returns an unmodifiable view of the filtered transaction list */
     ObservableList<Transaction> getFilteredTransactionList();
@@ -120,4 +142,18 @@ public interface Model {
      * @return true if there is undoable command, else false.
      */
     boolean hasUndoableCommand();
+
+    /**
+     * Returns the undone command.
+     *
+     * @return undone command
+     */
+    Undoable getUndoneCommand();
+
+    /**
+     * Checks if there is any undone command to redo.
+     *
+     * @return true if there is undone command, else false.
+     */
+    boolean hasUndoneCommand();
 }

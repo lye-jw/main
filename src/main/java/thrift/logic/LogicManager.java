@@ -51,6 +51,7 @@ public class LogicManager implements Logic {
         }
         if (command instanceof Undoable) {
             model.keepTrackCommands((Undoable) command);
+            logger.info("[UNDOABLE COMMAND][" + commandText + "] is tracked");
         }
         try {
             storage.saveThrift(model.getThrift());

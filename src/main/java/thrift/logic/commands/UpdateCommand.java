@@ -18,6 +18,7 @@ import thrift.model.tag.Tag;
 import thrift.model.transaction.Description;
 import thrift.model.transaction.Expense;
 import thrift.model.transaction.Income;
+import thrift.model.transaction.Remark;
 import thrift.model.transaction.Transaction;
 import thrift.model.transaction.TransactionDate;
 import thrift.model.transaction.Value;
@@ -36,12 +37,14 @@ public class UpdateCommand extends Command {
             + "Parameters: " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_NAME + "NAME DESCRIPTION] "
             + "[" + CliSyntax.PREFIX_COST + "COST] "
+            + "[" + CliSyntax.PREFIX_REMARK + "REMARK] "
             + "[" + CliSyntax.PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1 "
             + CliSyntax.PREFIX_NAME + "Mee Siam "
             + CliSyntax.PREFIX_COST + "3.00";
 
     public static final String MESSAGE_UPDATE_TRANSACTION_SUCCESS = "Updated Transaction: %1$s";
+    public static final String MESSAGE_ORIGINAL_TRANSACTION = "\n\nOriginal: %1$s";
     public static final String MESSAGE_NOT_UPDATED = "At least one field to update must be provided.";
 
     private final Index index;
@@ -77,7 +80,9 @@ public class UpdateCommand extends Command {
         }
 
         Transaction transactionToUpdate = lastShownList.get(index.getZeroBased());
+        String originalTransactionNotification = String.format(MESSAGE_ORIGINAL_TRANSACTION, transactionToUpdate);
         Transaction updatedTransaction = createUpdatedTransaction(transactionToUpdate, updateTransactionDescriptor);
+        String updatedTransactionNotification = String.format(MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedTransaction);
 
         model.setTransaction(transactionToUpdate, updatedTransaction);
         model.updateFilteredTransactionList(Model.PREDICATE_SHOW_ALL_TRANSACTIONS);
@@ -86,7 +91,7 @@ public class UpdateCommand extends Command {
             transactionListPanel.getTransactionListView().scrollTo(index.getZeroBased());
         }
 
-        return new CommandResult(String.format(MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedTransaction));
+        return new CommandResult(updatedTransactionNotification + originalTransactionNotification);
     }
 
     public CommandResult execute(Model model) throws CommandException {
@@ -104,14 +109,15 @@ public class UpdateCommand extends Command {
         Description updatedDescription = updateTransactionDescriptor.getDescription()
                 .orElse(transactionToUpdate.getDescription());
         Value updatedValue = updateTransactionDescriptor.getValue().orElse(transactionToUpdate.getValue());
+        Remark updatedRemark = updateTransactionDescriptor.getRemark().orElse(transactionToUpdate.getRemark());
         TransactionDate updatedDate = updateTransactionDescriptor.getDate().orElse(transactionToUpdate.getDate());
         Set<Tag> updatedTags = updateTransactionDescriptor.getTags().orElse(transactionToUpdate.getTags());
 
         if (transactionToUpdate instanceof Expense) {
-            return new Expense(updatedDescription, updatedValue, updatedDate, updatedTags);
+            return new Expense(updatedDescription, updatedValue, updatedRemark, updatedDate, updatedTags);
         } else {
             assert transactionToUpdate instanceof Income;
-            return new Income(updatedDescription, updatedValue, updatedDate, updatedTags);
+            return new Income(updatedDescription, updatedValue, updatedRemark, updatedDate, updatedTags);
         }
     }
 
@@ -140,6 +146,7 @@ public class UpdateCommand extends Command {
     public static class UpdateTransactionDescriptor {
         private Description description;
         private Value value;
+        private Remark remark;
         private TransactionDate date;
         private Set<Tag> tags;
 
@@ -152,6 +159,7 @@ public class UpdateCommand extends Command {
         public UpdateTransactionDescriptor(UpdateTransactionDescriptor toCopy) {
             setDescription(toCopy.description);
             setValue(toCopy.value);
+            setRemark(toCopy.remark);
             setDate(toCopy.date);
             setTags(toCopy.tags);
         }
@@ -160,7 +168,7 @@ public class UpdateCommand extends Command {
          * Returns true if at least one field is updated.
          */
         public boolean isAnyFieldUpdated() {
-            return CollectionUtil.isAnyNonNull(description, value, date, tags);
+            return CollectionUtil.isAnyNonNull(description, value, remark, date, tags);
         }
 
         public void setDescription(Description description) {
@@ -177,6 +185,14 @@ public class UpdateCommand extends Command {
 
         public Optional<Value> getValue() {
             return Optional.ofNullable(value);
+        }
+
+        public void setRemark(Remark remark) {
+            this.remark = remark;
+        }
+
+        public Optional<Remark> getRemark() {
+            return Optional.ofNullable(remark);
         }
 
         public void setDate(TransactionDate date) {
@@ -221,6 +237,7 @@ public class UpdateCommand extends Command {
 
             return getDescription().equals(e.getDescription())
                     && getValue().equals(e.getValue())
+                    && getRemark().equals(e.getRemark())
                     && getDate().equals(e.getDate())
                     && getTags().equals(e.getTags());
         }

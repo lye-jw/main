@@ -25,7 +25,6 @@ public class TransactionListPanel extends UiPart<Region> {
         super(FXML);
         transactionListView.setItems(transactionList);
         transactionListView.setCellFactory(listView -> new TransactionListViewCell());
-        System.out.println("HEY");
     }
 
     /**

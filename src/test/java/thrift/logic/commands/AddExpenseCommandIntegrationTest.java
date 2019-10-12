@@ -3,17 +3,15 @@ package thrift.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static thrift.logic.commands.CommandTestUtil.assertCommandSuccess;
 
-import java.util.List;
-
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import thrift.logic.commands.exceptions.CommandException;
 import thrift.model.Model;
 import thrift.model.ModelManager;
 import thrift.model.PastUndoableCommands;
 import thrift.model.UserPrefs;
 import thrift.model.transaction.Expense;
-import thrift.model.transaction.Transaction;
 import thrift.testutil.ExpenseBuilder;
 import thrift.testutil.TypicalTransactions;
 
@@ -41,18 +39,44 @@ public class AddExpenseCommandIntegrationTest {
     }
 
     @Test
-    public void undo_success() {
+    public void undo_undoAddExpense_success() throws CommandException {
         Model expectedModel = new ModelManager(model.getThrift(), new UserPrefs(), new PastUndoableCommands());
 
         Expense validExpense = new ExpenseBuilder().build();
-
         model.addExpense(validExpense);
-        List<Transaction> lastShownList = model.getThrift().getTransactionList();
-        assertEquals(validExpense, lastShownList.get(lastShownList.size() - 1));
+        AddExpenseCommand addExpenseCommand = new AddExpenseCommand(validExpense);
+        model.keepTrackCommands(addExpenseCommand);
+        expectedModel.addExpense(validExpense);
+        assertEquals(expectedModel, model);
 
-        Transaction transactionToDelete = lastShownList.get(lastShownList.size() - 1);
-        model.deleteTransaction(transactionToDelete);
+        Undoable undoable = model.getPreviousUndoableCommand();
+        undoable.undo(model);
+        expectedModel.deleteLastTransaction();
+        assertEquals(expectedModel, model);
+    }
 
+    @Test
+    public void redo_redoAddExpense_success() throws CommandException {
+        Model expectedModel = new ModelManager(model.getThrift(), new UserPrefs(), new PastUndoableCommands());
+
+        //add expense to THIRFT
+        Expense validExpense = new ExpenseBuilder().build();
+        model.addExpense(validExpense);
+        AddExpenseCommand addExpenseCommand = new AddExpenseCommand(validExpense);
+        model.keepTrackCommands(addExpenseCommand);
+        expectedModel.addExpense(validExpense);
+        assertEquals(expectedModel, model);
+
+        //undo add_expense command
+        Undoable undoable = model.getPreviousUndoableCommand();
+        undoable.undo(model);
+        expectedModel.deleteLastTransaction();
+        assertEquals(expectedModel, model);
+
+        //redo add_expense command
+        undoable = model.getUndoneCommand();
+        undoable.redo(model);
+        expectedModel.addExpense(validExpense);
         assertEquals(expectedModel, model);
     }
 

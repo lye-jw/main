@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static thrift.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
+import java.util.Optional;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -102,8 +103,19 @@ public class ModelManager implements Model {
     }
 
     @Override
+    public Optional<Index> getIndexInFullTransactionList(Transaction transaction) {
+        return thrift.getTransactionIndex(transaction);
+    }
+
+    @Override
     public void deleteTransaction(Transaction transaction) {
         thrift.removeTransaction(transaction);
+    }
+
+    @Override
+    public void deleteLastTransaction() {
+        thrift.removeLastTransaction();
+        updateFilteredTransactionList(PREDICATE_SHOW_ALL_TRANSACTIONS);
     }
 
     @Override
@@ -134,6 +146,11 @@ public class ModelManager implements Model {
     public void setTransaction(Transaction target, Transaction updatedTransaction) {
         CollectionUtil.requireAllNonNull(target, updatedTransaction);
         thrift.setTransaction(target, updatedTransaction);
+    }
+
+    @Override
+    public Transaction getLastTransactionFromThrift() {
+        return thrift.getLastTransaction();
     }
 
     //=========== Filtered Transaction List Accessors =============================================================
@@ -174,15 +191,28 @@ public class ModelManager implements Model {
     }
 
     //=========== Past Commands History =============================================================
+    @Override
     public void keepTrackCommands(Undoable command) {
         pastUndoableCommands.addPastCommand(command);
     }
 
+    @Override
     public Undoable getPreviousUndoableCommand() {
         return pastUndoableCommands.getCommandToUndo();
     }
 
+    @Override
     public boolean hasUndoableCommand() {
-        return !pastUndoableCommands.isEmpty();
+        return pastUndoableCommands.hasUndoCommand();
+    }
+
+    @Override
+    public Undoable getUndoneCommand() {
+        return pastUndoableCommands.getCommandToRedo();
+    }
+
+    @Override
+    public boolean hasUndoneCommand() {
+        return pastUndoableCommands.hasRedoCommand();
     }
 }
