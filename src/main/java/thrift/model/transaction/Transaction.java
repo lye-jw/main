@@ -42,4 +42,21 @@ public abstract class Transaction {
      * @return Set&lt;Tag&gt; belonging to this Transaction object.
      */
     public abstract Set<Tag> getTags();
+
+    /**
+     * Gets this Transaction object's {@code}isUpdated{@code} boolean value
+     *
+     * @return This Transaction object's isUpdated boolean value
+     */
+    public abstract boolean getIsJustUpdated();
+
+    /**
+     * Sets this Transaction object's {@code}isUpdated{@code} boolean value to {@code}true{@code}
+     */
+    public abstract void setIsJustUpdated();
+
+    /**
+     * Sets this Transaction object's {@code}isUpdated{@code} boolean value to {@code}false{@code}
+     */
+    public abstract void setNotJustUpdated();
 }

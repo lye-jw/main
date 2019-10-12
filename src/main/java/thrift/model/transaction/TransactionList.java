@@ -23,6 +23,7 @@ public class TransactionList implements Iterable<Transaction> {
     private final ObservableList<Transaction> internalList = FXCollections.observableArrayList();
     private final ObservableList<Transaction> internalUnmodifiableList =
             FXCollections.unmodifiableObservableList(internalList);
+    private int lastUpdatedTransactionIndex;
 
     /**
      * Returns true if the supplied Transaction object is inside this transaction list.

@@ -89,11 +89,16 @@ public class UpdateCommand extends Command {
         TransactionDate updatedDate = updateTransactionDescriptor.getDate().orElse(transactionToUpdate.getDate());
         Set<Tag> updatedTags = updateTransactionDescriptor.getTags().orElse(transactionToUpdate.getTags());
 
+        Transaction updatedTransaction;
         if (transactionToUpdate instanceof Expense) {
-            return new Expense(updatedDescription, updatedValue, updatedDate, updatedTags);
+            updatedTransaction = new Expense(updatedDescription, updatedValue, updatedDate, updatedTags);
         } else {
-            return new Income(updatedDescription, updatedValue, updatedDate, updatedTags);
+            assert transactionToUpdate instanceof Income;
+            updatedTransaction = new Income(updatedDescription, updatedValue, updatedDate, updatedTags);
         }
+        updatedTransaction.setIsJustUpdated();
+        System.out.println(updatedTransaction.getIsJustUpdated());
+        return updatedTransaction;
     }
 
     @Override

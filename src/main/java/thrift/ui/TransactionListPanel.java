@@ -9,6 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import thrift.commons.core.LogsCenter;
 import thrift.model.transaction.Expense;
+import thrift.model.transaction.Income;
 import thrift.model.transaction.Transaction;
 
 /**
@@ -42,8 +43,17 @@ public class TransactionListPanel extends UiPart<Region> {
             } else {
                 if (transaction instanceof Expense) {
                     setGraphic(new ExpenseTransactionCard(transaction, getIndex() + 1).getRoot());
+                    if (((Expense) transaction).getIsJustUpdated()) {
+                        transactionListView.scrollTo(getIndex());
+                        transaction.setNotJustUpdated();
+                    }
                 } else {
+                    assert transaction instanceof Income;
                     setGraphic(new IncomeTransactionCard(transaction, getIndex() + 1).getRoot());
+                    if (((Income) transaction).getIsJustUpdated()) {
+                        transactionListView.scrollTo(getIndex());
+                        transaction.setNotJustUpdated();
+                    }
                 }
             }
         }
