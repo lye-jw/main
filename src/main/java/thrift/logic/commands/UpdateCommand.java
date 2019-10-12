@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
-import javafx.scene.control.ListView;
 import thrift.commons.core.Messages;
 import thrift.commons.core.index.Index;
 import thrift.commons.util.CollectionUtil;
@@ -60,6 +59,15 @@ public class UpdateCommand extends Command {
         this.updateTransactionDescriptor = new UpdateTransactionDescriptor(updateTransactionDescriptor);
     }
 
+    /**
+     * Updates the details of a THRIFT Transaction and scrolls to the updated Transaction in the displayed
+     * TransactionListView UI.
+     *
+     * @param model {@code Model} which UpdateCommand should operate on.
+     * @param transactionListPanel {@code TransactionListPanel} which contains the TransactionListView UI.
+     * @return feedback message of the operation result for display
+     * @throws CommandException If an error occurs during command execution.
+     */
     public CommandResult execute(Model model, TransactionListPanel transactionListPanel) throws CommandException {
         requireNonNull(model);
         List<Transaction> lastShownList = model.getFilteredTransactionList();
@@ -74,7 +82,9 @@ public class UpdateCommand extends Command {
         model.setTransaction(transactionToUpdate, updatedTransaction);
         model.updateFilteredTransactionList(Model.PREDICATE_SHOW_ALL_TRANSACTIONS);
 
-        transactionListPanel.getTransactionListView().scrollTo(index.getZeroBased());
+        if (transactionListPanel != null) {
+            transactionListPanel.getTransactionListView().scrollTo(index.getZeroBased());
+        }
 
         return new CommandResult(String.format(MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedTransaction));
     }

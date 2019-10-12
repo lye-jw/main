@@ -9,9 +9,7 @@ import javafx.scene.control.ListView;
 import javafx.scene.layout.Region;
 import thrift.commons.core.LogsCenter;
 import thrift.model.transaction.Expense;
-import thrift.model.transaction.Income;
 import thrift.model.transaction.Transaction;
-import thrift.model.transaction.TransactionList;
 
 /**
  * Panel containing the list of transactions.
