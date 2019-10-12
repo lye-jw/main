@@ -18,7 +18,6 @@ public class Income extends Transaction {
     private final TransactionDate date;
     private final Value value;
     private final Set<Tag> tags = new HashSet<>();
-    private boolean isJustUpdated;
 
     /**
      * Every field must be present and not null.
@@ -28,7 +27,6 @@ public class Income extends Transaction {
         this.date = date;
         this.value = value;
         this.tags.addAll(tags);
-        this.isJustUpdated = false;
     }
 
     public Description getDescription() {
@@ -63,18 +61,6 @@ public class Income extends Transaction {
         return otherIncome != null
                 && otherIncome.getDescription().equals(getDescription())
                 && otherIncome.getValue().equals(getValue());
-    }
-
-    public boolean getIsJustUpdated() {
-        return isJustUpdated;
-    }
-
-    public void setIsJustUpdated() {
-        this.isJustUpdated = true;
-    }
-
-    public void setNotJustUpdated() {
-        this.isJustUpdated = false;
     }
 
     @Override

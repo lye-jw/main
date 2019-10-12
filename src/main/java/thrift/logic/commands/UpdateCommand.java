@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import javafx.scene.control.ListView;
 import thrift.commons.core.Messages;
 import thrift.commons.core.index.Index;
 import thrift.commons.util.CollectionUtil;
@@ -21,6 +22,7 @@ import thrift.model.transaction.Income;
 import thrift.model.transaction.Transaction;
 import thrift.model.transaction.TransactionDate;
 import thrift.model.transaction.Value;
+import thrift.ui.TransactionListPanel;
 
 /**
  * Updates the details of an existing transaction in THRIFT.
@@ -58,8 +60,7 @@ public class UpdateCommand extends Command {
         this.updateTransactionDescriptor = new UpdateTransactionDescriptor(updateTransactionDescriptor);
     }
 
-    @Override
-    public CommandResult execute(Model model) throws CommandException {
+    public CommandResult execute(Model model, TransactionListPanel transactionListPanel) throws CommandException {
         requireNonNull(model);
         List<Transaction> lastShownList = model.getFilteredTransactionList();
 
@@ -72,7 +73,14 @@ public class UpdateCommand extends Command {
 
         model.setTransaction(transactionToUpdate, updatedTransaction);
         model.updateFilteredTransactionList(Model.PREDICATE_SHOW_ALL_TRANSACTIONS);
+
+        transactionListPanel.getTransactionListView().scrollTo(index.getZeroBased());
+
         return new CommandResult(String.format(MESSAGE_UPDATE_TRANSACTION_SUCCESS, updatedTransaction));
+    }
+
+    public CommandResult execute(Model model) throws CommandException {
+        throw new CommandException(Messages.MESSAGE_UNKNOWN_COMMAND);
     }
 
     /**
@@ -89,16 +97,12 @@ public class UpdateCommand extends Command {
         TransactionDate updatedDate = updateTransactionDescriptor.getDate().orElse(transactionToUpdate.getDate());
         Set<Tag> updatedTags = updateTransactionDescriptor.getTags().orElse(transactionToUpdate.getTags());
 
-        Transaction updatedTransaction;
         if (transactionToUpdate instanceof Expense) {
-            updatedTransaction = new Expense(updatedDescription, updatedValue, updatedDate, updatedTags);
+            return new Expense(updatedDescription, updatedValue, updatedDate, updatedTags);
         } else {
             assert transactionToUpdate instanceof Income;
-            updatedTransaction = new Income(updatedDescription, updatedValue, updatedDate, updatedTags);
+            return new Income(updatedDescription, updatedValue, updatedDate, updatedTags);
         }
-        updatedTransaction.setIsJustUpdated();
-        System.out.println(updatedTransaction.getIsJustUpdated());
-        return updatedTransaction;
     }
 
     @Override

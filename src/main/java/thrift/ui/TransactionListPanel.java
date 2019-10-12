@@ -11,6 +11,7 @@ import thrift.commons.core.LogsCenter;
 import thrift.model.transaction.Expense;
 import thrift.model.transaction.Income;
 import thrift.model.transaction.Transaction;
+import thrift.model.transaction.TransactionList;
 
 /**
  * Panel containing the list of transactions.
@@ -26,6 +27,7 @@ public class TransactionListPanel extends UiPart<Region> {
         super(FXML);
         transactionListView.setItems(transactionList);
         transactionListView.setCellFactory(listView -> new TransactionListViewCell());
+        System.out.println("HEY");
     }
 
     /**
@@ -43,20 +45,14 @@ public class TransactionListPanel extends UiPart<Region> {
             } else {
                 if (transaction instanceof Expense) {
                     setGraphic(new ExpenseTransactionCard(transaction, getIndex() + 1).getRoot());
-                    if (((Expense) transaction).getIsJustUpdated()) {
-                        transactionListView.scrollTo(getIndex());
-                        transaction.setNotJustUpdated();
-                    }
                 } else {
-                    assert transaction instanceof Income;
                     setGraphic(new IncomeTransactionCard(transaction, getIndex() + 1).getRoot());
-                    if (((Income) transaction).getIsJustUpdated()) {
-                        transactionListView.scrollTo(getIndex());
-                        transaction.setNotJustUpdated();
-                    }
                 }
             }
         }
     }
 
+    public ListView<Transaction> getTransactionListView() {
+        return transactionListView;
+    }
 }
