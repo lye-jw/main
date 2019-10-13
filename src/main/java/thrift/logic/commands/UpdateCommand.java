@@ -87,6 +87,8 @@ public class UpdateCommand extends Command {
         model.setTransaction(transactionToUpdate, updatedTransaction);
         model.updateFilteredTransactionList(Model.PREDICATE_SHOW_ALL_TRANSACTIONS);
 
+        // Use null comparison instead of requireNonNull(transactionListPanel) as current JUnit tests are unable to
+        // handle JavaFX initialization
         if (transactionListPanel != null) {
             transactionListPanel.getTransactionListView().scrollTo(index.getZeroBased());
         }

@@ -18,7 +18,9 @@ import thrift.ui.TransactionListPanel;
 public interface Logic {
     /**
      * Executes the command and returns the result.
+     *
      * @param commandText The command as entered by the user.
+     * @param transactionListPanel The TransactionListPanel to be manipulated by execution of certain commands.
      * @return the result of the command execution.
      * @throws CommandException If an error occurs during command execution.
      * @throws ParseException If an error occurs during parsing.
