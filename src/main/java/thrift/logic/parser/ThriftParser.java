@@ -6,7 +6,21 @@ import static thrift.commons.core.Messages.MESSAGE_UNKNOWN_COMMAND;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import thrift.logic.commands.*;
+import thrift.logic.commands.AddExpenseCommand;
+import thrift.logic.commands.AddIncomeCommand;
+import thrift.logic.commands.ClearCommand;
+import thrift.logic.commands.CloneCommand;
+import thrift.logic.commands.Command;
+import thrift.logic.commands.DeleteCommand;
+import thrift.logic.commands.ExitCommand;
+import thrift.logic.commands.FindCommand;
+import thrift.logic.commands.HelpCommand;
+import thrift.logic.commands.ListCommand;
+import thrift.logic.commands.RedoCommand;
+import thrift.logic.commands.TagCommand;
+import thrift.logic.commands.UndoCommand;
+import thrift.logic.commands.UntagCommand;
+import thrift.logic.commands.UpdateCommand;
 import thrift.logic.parser.exceptions.ParseException;
 
 /**

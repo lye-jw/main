@@ -44,6 +44,7 @@ public class CloneCommand extends Command implements Undoable {
      * @param targetIndex from the displayed list of the transaction to be cloned
      */
     public CloneCommand(Index targetIndex) {
+        requireNonNull(targetIndex);
         this.targetIndex = targetIndex;
         this.clonedTransaction = null;
     }
@@ -57,7 +58,8 @@ public class CloneCommand extends Command implements Undoable {
             throw new CommandException(Messages.MESSAGE_INVALID_TRANSACTION_DISPLAYED_INDEX);
         }
 
-        clonedTransaction = createClonedTransaction(model, lastShownList);
+        Transaction transactionToClone = lastShownList.get(targetIndex.getZeroBased());
+        clonedTransaction = createClonedTransaction(transactionToClone);
         if (clonedTransaction instanceof Expense) {
             model.addExpense((Expense) clonedTransaction);
         } else if (clonedTransaction instanceof Income) {
@@ -67,8 +69,14 @@ public class CloneCommand extends Command implements Undoable {
         return new CommandResult(String.format(MESSAGE_CLONE_TRANSACTION_SUCCESS, clonedTransaction));
     }
 
-    private Transaction createClonedTransaction(Model model, List<Transaction> lastShownList) {
-        Transaction transactionToClone = lastShownList.get(targetIndex.getZeroBased());
+    /**
+     * Create a clone of the transaction at {@link #targetIndex} of the displayed list.
+     *
+     * @param transactionToClone {@link Transaction} that a clone should be created of, with current Date.
+     * @return {@link Expense} or {@link Income} clone of {@code transactionToClone} containing current Date.
+     */
+    private Transaction createClonedTransaction(Transaction transactionToClone) {
+
         Description clonedDescription = transactionToClone.getDescription();
         Value clonedValue = transactionToClone.getValue();
         Remark clonedRemark = transactionToClone.getRemark();
