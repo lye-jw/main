@@ -6,6 +6,7 @@ import static thrift.testutil.Assert.assertThrows;
 
 import org.junit.jupiter.api.Test;
 
+import thrift.logic.commands.CommandTestUtil;
 import thrift.testutil.ExpenseBuilder;
 import thrift.testutil.TypicalTransactions;
 

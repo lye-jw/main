@@ -16,6 +16,7 @@ import org.junit.jupiter.api.Test;
 import thrift.logic.commands.AddExpenseCommand;
 import thrift.logic.commands.AddIncomeCommand;
 import thrift.logic.commands.ClearCommand;
+import thrift.logic.commands.CloneCommand;
 import thrift.logic.commands.DeleteCommand;
 import thrift.logic.commands.ExitCommand;
 import thrift.logic.commands.FindCommand;
@@ -110,13 +111,13 @@ public class ThriftParserTest {
         assertTrue(parser.parseCommand(RedoCommand.COMMAND_WORD) instanceof RedoCommand);
     }
 
-//    @Test
-//    public void parseCommand_clone() throws Exception {
-//        CloneCommand command = (CloneCommand) parser.parseCommand(
-//                CloneCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX
-//                        + TypicalIndexes.INDEX_FIRST_TRANSACTION.getOneBased());
-//        assertEquals(new CloneCommand(TypicalIndexes.INDEX_FIRST_TRANSACTION), command);
-//    }
+    @Test
+    public void parseCommand_clone() throws Exception {
+        CloneCommand command = (CloneCommand) parser.parseCommand(
+                CloneCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX
+                        + TypicalIndexes.INDEX_FIRST_TRANSACTION.getOneBased());
+        assertEquals(new CloneCommand(TypicalIndexes.INDEX_FIRST_TRANSACTION), command);
+    }
 
     @Test
     public void parseCommand_unrecognisedInput_throwsParseException() {
