@@ -31,7 +31,7 @@ public class TransactionUtil {
     }
 
     /**
-     * Returns the part of command string for the given {@code Expense}'s details.
+     * Returns the part of command string for the given {@code Transaction}'s details.
      */
     public static String getTransactionDetails(Transaction transaction) {
         StringBuilder sb = new StringBuilder();
