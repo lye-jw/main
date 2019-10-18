@@ -6,7 +6,6 @@ import static thrift.commons.core.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
 import org.junit.jupiter.api.Test;
 
 import thrift.logic.commands.AddIncomeCommand;
-import thrift.logic.commands.CommandTestUtil;
 import thrift.model.tag.Tag;
 import thrift.model.transaction.Value;
 

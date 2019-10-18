@@ -11,7 +11,6 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 
 import thrift.commons.core.index.Index;
-import thrift.logic.commands.CommandTestUtil;
 import thrift.model.transaction.exceptions.TransactionNotFoundException;
 import thrift.testutil.ExpenseBuilder;
 import thrift.testutil.TypicalTransactions;

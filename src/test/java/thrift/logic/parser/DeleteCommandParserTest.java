@@ -6,7 +6,6 @@ import static thrift.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
 import org.junit.jupiter.api.Test;
 
-import thrift.logic.commands.CommandTestUtil;
 import thrift.logic.commands.DeleteCommand;
 import thrift.testutil.TypicalIndexes;
 

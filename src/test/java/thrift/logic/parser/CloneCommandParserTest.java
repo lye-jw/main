@@ -7,7 +7,6 @@ import static thrift.logic.parser.CommandParserTestUtil.assertParseSuccess;
 import org.junit.jupiter.api.Test;
 
 import thrift.logic.commands.CloneCommand;
-import thrift.logic.commands.CommandTestUtil;
 import thrift.testutil.TypicalIndexes;
 
 public class CloneCommandParserTest {
