@@ -43,7 +43,8 @@ public class CloneCommandTest {
         CloneCommand cloneCommand = new CloneCommand(TypicalIndexes.INDEX_SECOND_TRANSACTION);
 
         Income expectedTransaction = new IncomeBuilder()
-                .withDescription(transactionToClone.getDescription().value).withDate(DATE_FORMATTER.format(new Date()))
+                .withDescription(transactionToClone.getDescription().value)
+                .withDate(DATE_FORMATTER.format(new Date()))
                 .withValue(transactionToClone.getValue().getUnformattedString())
                 .withRemark(transactionToClone.getRemark().value)
                 .withTags(transactionToClone.getTags().iterator().next().tagName)
@@ -74,7 +75,8 @@ public class CloneCommandTest {
         CloneCommand cloneCommand = new CloneCommand(TypicalIndexes.INDEX_FIRST_TRANSACTION);
 
         Expense expectedTransaction = new ExpenseBuilder()
-                .withDescription(transactionToClone.getDescription().value).withDate(DATE_FORMATTER.format(new Date()))
+                .withDescription(transactionToClone.getDescription().value)
+                .withDate(DATE_FORMATTER.format(new Date()))
                 .withValue(transactionToClone.getValue().getUnformattedString())
                 .withRemark(transactionToClone.getRemark().value)
                 .withTags(transactionToClone.getTags().iterator().next().tagName)

@@ -33,14 +33,14 @@ public class CloneCommand extends Command implements Undoable {
             + "Parameters: " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer)\n"
             + "Example: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1";
 
-    public static final String MESSAGE_CLONE_TRANSACTION_SUCCESS = "Cloned Transaction: %1$s";
+    public static final String MESSAGE_CLONE_TRANSACTION_SUCCESS = "Cloned transaction: %1$s";
 
     private final Index targetIndex;
     private Transaction clonedTransaction;
 
     /**
-     * Creates a CloneCommand instance to clone an {@code Expense} or {@code Income
-     * }
+     * Creates a CloneCommand instance to clone an {@code Expense} or {@code Income}
+     *
      * @param targetIndex from the displayed list of the transaction to be cloned
      */
     public CloneCommand(Index targetIndex) {
@@ -70,7 +70,7 @@ public class CloneCommand extends Command implements Undoable {
     }
 
     /**
-     * Create a clone of the transaction at {@link #targetIndex} of the displayed list.
+     * Creates a clone of the transaction at {@link #targetIndex} of the displayed list.
      *
      * @param transactionToClone {@link Transaction} that a clone should be created of, with current Date.
      * @return {@link Expense} or {@link Income} clone of {@code transactionToClone} containing current Date.
