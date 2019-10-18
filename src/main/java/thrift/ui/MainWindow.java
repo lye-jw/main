@@ -175,7 +175,7 @@ public class MainWindow extends UiPart<Stage> {
     /**
      * Executes the command and returns the result.
      *
-     * @see Logic#execute(String)
+     * @see Logic#execute(String, TransactionListPanel)
      */
     private CommandResult executeCommand(String commandText) throws CommandException, ParseException {
         try {
