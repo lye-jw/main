@@ -1,7 +1,6 @@
 package thrift.logic.commands;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static thrift.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static thrift.logic.commands.CommandTestUtil.assertRedoCommandSuccess;
@@ -228,15 +227,5 @@ public class UpdateCommandTest {
         // different descriptor -> returns false
         assertFalse(standardCommand.equals(new UpdateCommand(TypicalIndexes.INDEX_FIRST_TRANSACTION,
                 CommandTestUtil.DESC_PURCHASE)));
-    }
-
-    @Test
-    public void execute_wrongExecuteCalled_throwsCommandException() {
-        CommandTestUtil.showTransactionAtIndex(model, TypicalIndexes.INDEX_FIRST_TRANSACTION);
-        Index firstIndex = TypicalIndexes.INDEX_FIRST_TRANSACTION;
-        UpdateCommand updateCommand = new UpdateCommand(firstIndex,
-                new UpdateTransactionDescriptorBuilder().withDescription(CommandTestUtil.VALID_DESCRIPTION_LAKSA)
-                        .build());
-        assertThrows(CommandException.class, () -> updateCommand.execute(model));
     }
 }

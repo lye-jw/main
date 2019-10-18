@@ -27,7 +27,7 @@ import thrift.ui.TransactionListPanel;
 /**
  * Updates the details of an existing transaction in THRIFT.
  */
-public class UpdateCommand extends Command implements Undoable {
+public class UpdateCommand extends ScrollingCommand implements Undoable {
 
     public static final String COMMAND_WORD = "update";
 
@@ -102,10 +102,6 @@ public class UpdateCommand extends Command implements Undoable {
         return new CommandResult(updatedTransactionNotification + originalTransactionNotification);
     }
 
-    public CommandResult execute(Model model) throws CommandException {
-        throw new CommandException(Messages.MESSAGE_UNKNOWN_COMMAND);
-    }
-
     /**
      * Creates and returns a {@code Transaction} with the details of {@code transactionToUpdate}
      * updated with {@code updateTransactionDescriptor}.
@@ -124,7 +120,6 @@ public class UpdateCommand extends Command implements Undoable {
         if (transactionToUpdate instanceof Expense) {
             return new Expense(updatedDescription, updatedValue, updatedRemark, updatedDate, updatedTags);
         } else {
-            assert transactionToUpdate instanceof Income;
             return new Income(updatedDescription, updatedValue, updatedRemark, updatedDate, updatedTags);
         }
     }

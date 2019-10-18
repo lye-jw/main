@@ -23,7 +23,7 @@ import thrift.model.transaction.Value;
 /**
  * Tags a specified Transaction
  */
-public class TagCommand extends Command {
+public class TagCommand extends NonScrollingCommand {
 
     public static final String COMMAND_WORD = "tag";
 

@@ -8,7 +8,7 @@ import thrift.model.Thrift;
 /**
  * Clears THRIFT.
  */
-public class ClearCommand extends Command {
+public class ClearCommand extends NonScrollingCommand {
 
     public static final String COMMAND_WORD = "clear";
     public static final String MESSAGE_SUCCESS = "THRIFT has been cleared!";
