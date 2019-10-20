@@ -1,6 +1,7 @@
 package thrift.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static thrift.commons.util.CollectionUtil.requireAllNonNull;
 
 import thrift.logic.parser.CliSyntax;
 import thrift.model.Model;
@@ -16,12 +17,12 @@ public class AddExpenseCommand extends NonScrollingCommand implements Undoable {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds an expense transaction to THRIFT. "
             + "Parameters: "
             + CliSyntax.PREFIX_NAME + "NAME DESCRIPTION "
-            + CliSyntax.PREFIX_COST + "COST "
+            + CliSyntax.PREFIX_VALUE + "VALUE "
             + "[" + CliSyntax.PREFIX_REMARK + "REMARK] "
             + "[" + CliSyntax.PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " "
             + CliSyntax.PREFIX_NAME + "Laksa "
-            + CliSyntax.PREFIX_COST + "4.50 "
+            + CliSyntax.PREFIX_VALUE + "4.50 "
             + CliSyntax.PREFIX_REMARK + "Ate at Changi Village "
             + CliSyntax.PREFIX_TAG + "Lunch "
             + CliSyntax.PREFIX_TAG + "Meal ";
@@ -60,8 +61,7 @@ public class AddExpenseCommand extends NonScrollingCommand implements Undoable {
 
     @Override
     public void redo(Model model) {
-        requireNonNull(model);
-        requireNonNull(toAdd);
+        requireAllNonNull(model, toAdd);
         model.addExpense(toAdd);
     }
 }

@@ -1,6 +1,7 @@
 package thrift.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static thrift.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -36,12 +37,12 @@ public class UpdateCommand extends ScrollingCommand implements Undoable {
             + "Existing values will be overwritten by the input values.\n"
             + "Parameters: " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_NAME + "NAME DESCRIPTION] "
-            + "[" + CliSyntax.PREFIX_COST + "COST] "
+            + "[" + CliSyntax.PREFIX_VALUE + "VALUE] "
             + "[" + CliSyntax.PREFIX_REMARK + "REMARK] "
             + "[" + CliSyntax.PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1 "
             + CliSyntax.PREFIX_NAME + "Mee Siam "
-            + CliSyntax.PREFIX_COST + "3.00";
+            + CliSyntax.PREFIX_VALUE + "3.00";
 
     public static final String MESSAGE_UPDATE_TRANSACTION_SUCCESS = "Updated Transaction: %1$s";
     public static final String MESSAGE_ORIGINAL_TRANSACTION = "\n\nOriginal: %1$s";
@@ -144,18 +145,14 @@ public class UpdateCommand extends ScrollingCommand implements Undoable {
 
     @Override
     public void undo(Model model) {
-        requireNonNull(model);
-        requireNonNull(transactionToUpdate);
-        requireNonNull(updatedTransaction);
-        model.setTransaction(updatedTransaction, transactionToUpdate);
+        requireAllNonNull(model, transactionToUpdate, updatedTransaction, actualIndex);
+        model.setTransactionWithIndex(actualIndex, transactionToUpdate);
     }
 
     @Override
     public void redo(Model model) {
-        requireNonNull(model);
-        requireNonNull(transactionToUpdate);
-        requireNonNull(updatedTransaction);
-        model.setTransaction(transactionToUpdate, updatedTransaction);
+        requireAllNonNull(model, transactionToUpdate, updatedTransaction, actualIndex);
+        model.setTransactionWithIndex(actualIndex, updatedTransaction);
     }
 
     /**

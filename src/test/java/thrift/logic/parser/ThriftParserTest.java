@@ -14,7 +14,8 @@ import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
 
 import thrift.logic.commands.AddExpenseCommand;
-import thrift.logic.commands.ClearCommand;
+import thrift.logic.commands.AddIncomeCommand;
+import thrift.logic.commands.CloneCommand;
 import thrift.logic.commands.DeleteCommand;
 import thrift.logic.commands.ExitCommand;
 import thrift.logic.commands.FindCommand;
@@ -25,9 +26,10 @@ import thrift.logic.commands.UndoCommand;
 import thrift.logic.commands.UpdateCommand;
 import thrift.logic.commands.UpdateCommand.UpdateTransactionDescriptor;
 import thrift.logic.parser.exceptions.ParseException;
-import thrift.model.transaction.DescriptionContainsKeywordsPredicate;
+import thrift.model.transaction.DescriptionOrRemarkContainsKeywordsPredicate;
 import thrift.model.transaction.Expense;
 import thrift.testutil.ExpenseBuilder;
+import thrift.testutil.IncomeBuilder;
 import thrift.testutil.TransactionUtil;
 import thrift.testutil.TypicalIndexes;
 import thrift.testutil.UpdateTransactionDescriptorBuilder;
@@ -43,9 +45,9 @@ public class ThriftParserTest {
     }
 
     @Test
-    public void parseCommand_clear() throws Exception {
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD) instanceof ClearCommand);
-        assertTrue(parser.parseCommand(ClearCommand.COMMAND_WORD + " 3") instanceof ClearCommand);
+    public void parseCommand_addIncome() throws Exception {
+        assertDoesNotThrow(() -> (AddIncomeCommand) parser.parseCommand(TransactionUtil
+                .getAddIncomeCommand(new IncomeBuilder().build())));
     }
 
     @Test
@@ -77,7 +79,7 @@ public class ThriftParserTest {
         FindCommand command = (FindCommand) parser.parseCommand(
                 FindCommand.COMMAND_WORD + " "
                         + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FindCommand(new DescriptionContainsKeywordsPredicate(keywords)), command);
+        assertEquals(new FindCommand(new DescriptionOrRemarkContainsKeywordsPredicate(keywords)), command);
     }
 
     @Test
@@ -100,6 +102,14 @@ public class ThriftParserTest {
     @Test
     public void parseCommand_redo() throws Exception {
         assertTrue(parser.parseCommand(RedoCommand.COMMAND_WORD) instanceof RedoCommand);
+    }
+
+    @Test
+    public void parseCommand_clone() throws Exception {
+        CloneCommand command = (CloneCommand) parser.parseCommand(
+                CloneCommand.COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX
+                        + TypicalIndexes.INDEX_FIRST_TRANSACTION.getOneBased());
+        assertEquals(new CloneCommand(TypicalIndexes.INDEX_FIRST_TRANSACTION), command);
     }
 
     @Test

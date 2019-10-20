@@ -1,6 +1,7 @@
 package thrift.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static thrift.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.util.HashSet;
 import java.util.List;
@@ -23,7 +24,7 @@ import thrift.model.transaction.Value;
 /**
  * Tags a specified Transaction
  */
-public class UntagCommand extends NonScrollingCommand {
+public class UntagCommand extends NonScrollingCommand implements Undoable {
 
     public static final String COMMAND_WORD = "untag";
 
@@ -45,6 +46,9 @@ public class UntagCommand extends NonScrollingCommand {
     private final Index index;
     private final Set<Tag> tagSet;
     private final StringBuilder nonexistentTags;
+    private Index actualIndex;
+    private Transaction transactionToTag;
+    private Transaction updatedTransaction;
 
     /**
      * Creates a UntagCommand to untag the specified {@code Transaction}
@@ -59,6 +63,9 @@ public class UntagCommand extends NonScrollingCommand {
         this.index = index;
         this.tagSet = tagSet;
         nonexistentTags = new StringBuilder();
+        this.actualIndex = null;
+        this.transactionToTag = null;
+        this.updatedTransaction = null;
     }
 
     @Override
@@ -70,16 +77,17 @@ public class UntagCommand extends NonScrollingCommand {
             throw new CommandException(Messages.MESSAGE_INVALID_TRANSACTION_DISPLAYED_INDEX);
         }
 
-        Transaction transactionToTag = lastShownList.get(index.getZeroBased());
+        transactionToTag = lastShownList.get(index.getZeroBased());
         String originalTransactionNotification = String.format(MESSAGE_ORIGINAL_TRANSACTION, transactionToTag);
-        Transaction updatedTransaction = createUntaggedTransaction(transactionToTag, tagSet);
+        updatedTransaction = createUntaggedTransaction(transactionToTag, tagSet);
         String taggedTransactionNotification = String.format(MESSAGE_UNTAG_TRANSACTION_SUCCESS, updatedTransaction);
         String nonexistentTagsNotification = nonexistentTags.length() == 0
                 ? ""
                 : String.format(MESSAGE_TAG_NOT_EXISTED, nonexistentTags.toString());
 
-        model.setTransactionWithIndex(index, updatedTransaction);
-        model.updateFilteredTransactionList(Model.PREDICATE_SHOW_ALL_TRANSACTIONS);
+        actualIndex = model.getIndexInFullTransactionList(transactionToTag).orElse(index);
+        model.setTransactionWithIndex(actualIndex, updatedTransaction);
+
         return new CommandResult(taggedTransactionNotification
                 + nonexistentTagsNotification
                 + originalTransactionNotification);
@@ -127,5 +135,17 @@ public class UntagCommand extends NonScrollingCommand {
         } else {
             return new Income(oldDescription, oldValue, oldRemark, oldDate, updatedTags);
         }
+    }
+
+    @Override
+    public void undo(Model model) {
+        requireAllNonNull(model, actualIndex, updatedTransaction, transactionToTag);
+        model.setTransactionWithIndex(actualIndex, transactionToTag);
+    }
+
+    @Override
+    public void redo(Model model) {
+        requireAllNonNull(model, actualIndex, updatedTransaction, transactionToTag);
+        model.setTransactionWithIndex(actualIndex, updatedTransaction);
     }
 }
