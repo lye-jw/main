@@ -367,7 +367,7 @@ Alternative 1 was chosen as we want to ensure the correctness of the **tag**/**u
 ** Cons: Results in a more complex implementation of the **tag** command, as there is a need to check for potential duplicates.
 // end:taguntag[]
 
-=== Updating Transactions
+=== Updating transactions
 The **update **functionality modifies details of a specified `**Transaction**` in the existing list and saves modifications to the external storage file.
 
 ==== Implementation
