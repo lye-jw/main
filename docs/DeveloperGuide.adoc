@@ -187,7 +187,7 @@ Classes used by multiple components are in the `**thrift.commons**` package.
 This section describes some noteworthy details on how certain features are implemented.
 
 // tag::budget[]
-=== Adding Transactions
+=== Adding transactions
 ==== Implementation
 The **add_expense**/**add_income** feature is implemented through polymorphism. `**Expense**` and `**Income**` are both subclasses of the abstract class `Transaction`.
 Each `**Transaction**` contains the following mandatory fields: `Description`, `TransactionDate` and `Value`; as well as optional fields: `Remark`,
@@ -343,7 +343,7 @@ image::tag-untag/TagActivity.png[]
 .Activity Diagram of the Un-tagging process
 image::tag-untag/UntagActivity.png[]
 
-==== Design Considerations
+==== Design considerations
 
 ===== Aspect: Mutability of `**Transaction**` objects
 
@@ -413,20 +413,20 @@ image::UpdateCommandDiagrams/UpdateStep4Part2.png[]
 .Replacement of original transaction with updated transaction in `UpdateCommand#execute()`
 image::UpdateCommandDiagrams/UpdateStep4Part3.png[]
 
-===== Execution Observed by User
+===== Execution observed by user
 The following activity diagram gives an overview of what the user observes when executing **update** comnand
 
 :figure-caption: Figure
 .Activity Diagram for execution of update command
 image::UpdateActivityDiagram.png[]
 
-==== Design Considerations
+==== Design considerations
 ===== Aspect: Modifying details of a transaction
 * **Alternative 1 (current choice)**: Replace the original transaction with a new updated transaction.
 - Pros: Easy to implement.
 - Cons: Incurs overhead when creating new instance of `**Transaction**`.
 * **Alternative 2**: Modify the transaction directly using setter methods.
-- Pros: Easy to implement.
+- Pros: Easy to implement and highly efficient.
 - Cons: Allowing modification of transactions violates immutability principle.
 
 **Alternative 1 chosen** to maintain better coding practices and keep transactions immutable for the entire project.
@@ -554,7 +554,7 @@ The activity diagram below will give an overview of what is happening when the c
 .Activity diagram of the command execution.
 image::list/ListActivityDiagram.png[]
 
-==== Design Considerations
+==== Design considerations
 
 ===== Aspect: Using `**Predicate**` to improve extendability of the feature in the future
 
