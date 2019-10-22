@@ -225,6 +225,17 @@ The following activity diagram gives an overview of how the app responds to the 
 .Activity Diagram for execution of update command
 image::UpdateActivityDiagram.png[]
 
+==== Design Considerations
+===== Aspect: Modifying details of a transaction
+* **Alternative 1 (current choice)**: Replace the original transaction with a new updated transaction.
+- Pros: Easy to implement.
+- Cons: Incurs overhead when creating new instance of `**Transaction**`.
+* **Alternative 2**: Modify the transaction directly using setter methods.
+- Pros: Easy to implement.
+- Cons: Allowing modification of transactions violates immutability principle.
+
+**Alternative 1 chosen** to maintain better coding practices and keep transactions immutable for the entire project.
+
 == Documentation
 Refer to the guide <<Documentation#, here>>.
 
