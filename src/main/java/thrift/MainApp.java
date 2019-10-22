@@ -2,6 +2,8 @@ package thrift;
 
 import java.io.IOException;
 import java.nio.file.Path;
+import java.util.HashMap;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.logging.Logger;
 
@@ -22,7 +24,9 @@ import thrift.model.ReadOnlyThrift;
 import thrift.model.ReadOnlyUserPrefs;
 import thrift.model.Thrift;
 import thrift.model.UserPrefs;
-import thrift.model.util.SampleDataUtil;
+import thrift.model.util.CurrencyUtil;
+import thrift.storage.CurrencyMappingsStorage;
+import thrift.storage.JsonCurrencyMappingsStorage;
 import thrift.storage.JsonThriftStorage;
 import thrift.storage.JsonUserPrefsStorage;
 import thrift.storage.Storage;
@@ -58,10 +62,14 @@ public class MainApp extends Application {
         UserPrefsStorage userPrefsStorage = new JsonUserPrefsStorage(config.getUserPrefsFilePath());
         UserPrefs userPrefs = initPrefs(userPrefsStorage);
         ThriftStorage thriftStorage = new JsonThriftStorage(userPrefs.getThriftFilePath());
-        storage = new StorageManager(thriftStorage, userPrefsStorage);
+        CurrencyMappingsStorage currencyMappingsStorage =
+                new JsonCurrencyMappingsStorage(userPrefs.getCurrencyMappingsFilePath());
+        storage = new StorageManager(thriftStorage, userPrefsStorage, currencyMappingsStorage);
         PastUndoableCommands pastUndoableCommands = new PastUndoableCommands();
 
         initLogging(config);
+
+        initCurrencyMappings(storage);
 
         model = initModelManager(storage, userPrefs, pastUndoableCommands);
 
@@ -84,7 +92,7 @@ public class MainApp extends Application {
             if (!thriftOptional.isPresent()) {
                 logger.info("Data file not found. Will be starting with a sample THRIFT");
             }
-            initialData = thriftOptional.orElseGet(SampleDataUtil::getSampleThrift);
+            initialData = thriftOptional.orElseGet(Thrift::new);
         } catch (DataConversionException e) {
             logger.warning("Data file not in the correct format. Will be starting with an empty THRIFT");
             initialData = new Thrift();
@@ -134,6 +142,28 @@ public class MainApp extends Application {
             logger.warning("Failed to save config file : " + StringUtil.getDetails(e));
         }
         return initializedConfig;
+    }
+
+    /**
+     * Initialises currencyMappings at CurrencyUtil using the file at {@code storage}'s Currency Mappings file path,
+     * or does nothing (to use default) if errors occur when
+     * reading from the file.
+     */
+    protected void initCurrencyMappings(Storage storage) {
+        Path currencyMappingsFilePath = storage.getCurrencyMappingsFilePath();
+        logger.info("Using currency file : " + currencyMappingsFilePath);
+
+        try {
+            HashMap<String, Double> currencyMappings = storage.readCurrencyMappings().get();
+            CurrencyUtil.setCurrencyMap(currencyMappings);
+        } catch (DataConversionException e) {
+            logger.warning("Currency Mappings file at " + currencyMappingsFilePath
+                    + " is not in the correct format. "
+                    + "Using default currency mappings");
+        } catch (IOException | NoSuchElementException e) {
+            logger.warning("Problem while reading from the file. Using default currency mappings");
+        }
+
     }
 
     /**
