@@ -78,7 +78,7 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
 
         // Use null comparison instead of requireNonNull(transactionListPanel) as current JUnit tests are unable to
         // handle JavaFX initialization
-        if (model.isInView(transactionToClone) && transactionListPanel != null) {
+        if (model.isInView(clonedTransaction) && transactionListPanel != null) {
             transactionListPanel.getTransactionListView().scrollTo(clonedTransaction);
         }
 
