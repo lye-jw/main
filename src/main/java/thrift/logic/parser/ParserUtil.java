@@ -15,6 +15,7 @@ import java.util.Set;
 import thrift.commons.core.index.Index;
 import thrift.commons.util.StringUtil;
 import thrift.logic.parser.exceptions.ParseException;
+import thrift.model.copy.Occurrence;
 import thrift.model.tag.Tag;
 import thrift.model.transaction.Budget;
 import thrift.model.transaction.BudgetValue;
@@ -181,6 +182,27 @@ public class ParserUtil {
             return Month.valueOf(monthCaps);
         } catch (java.text.ParseException pe) {
             throw new ParseException(ListCommandParser.MESSAGE_INVALID_MONTH_FORMAT);
+        }
+    }
+
+    /**
+     * Parses a String representing occurrence into an {@code Occurrence}.
+     *
+     * @throws ParseException if the given {@code month} is invalid.
+     */
+    public static Occurrence parseOccurrence(String inputOccurrence) throws ParseException {
+        requireNonNull(inputOccurrence);
+        try {
+            String[] occurrenceParts = inputOccurrence.split(":");
+            String frequency = occurrenceParts[0].trim().toLowerCase();
+            if (!Occurrence.isValidFrequency(frequency)) {
+                throw new ParseException(Occurrence.OCCURRENCE_CONSTRAINTS);
+            }
+
+            int numOccurrences = Integer.parseInt(occurrenceParts[1].trim());
+            return new Occurrence(frequency, numOccurrences);
+        } catch (Exception e) {
+            throw new ParseException(Occurrence.OCCURRENCE_CONSTRAINTS);
         }
     }
 }

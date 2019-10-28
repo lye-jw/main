@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Test;
 
 import thrift.logic.commands.CloneCommand;
 import thrift.logic.commands.CommandTestUtil;
+import thrift.model.copy.Occurrence;
 import thrift.testutil.TypicalIndexes;
 
 public class CloneCommandParserTest {
@@ -26,7 +27,7 @@ public class CloneCommandParserTest {
     @Test
     public void parse_validArgs_returnsCloneCommand() {
         assertParseSuccess(parser, CommandTestUtil.INDEX_TOKEN + "2", new CloneCommand(
-                TypicalIndexes.INDEX_SECOND_TRANSACTION));
+                TypicalIndexes.INDEX_SECOND_TRANSACTION, new Occurrence("daily", 1)));
     }
 
     @Test
