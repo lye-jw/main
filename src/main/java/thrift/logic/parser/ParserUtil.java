@@ -198,10 +198,9 @@ public class ParserUtil {
             if (!Occurrence.isValidFrequency(frequency)) {
                 throw new ParseException(Occurrence.OCCURRENCE_CONSTRAINTS);
             }
-
             int numOccurrences = Integer.parseInt(occurrenceParts[1].trim());
             return new Occurrence(frequency, numOccurrences);
-        } catch (Exception e) {
+        } catch (ParseException | NumberFormatException e) {
             throw new ParseException(Occurrence.OCCURRENCE_CONSTRAINTS);
         }
     }
