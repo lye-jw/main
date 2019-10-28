@@ -38,8 +38,8 @@ public class CloneCommandTest {
     @Test
     public void constructor_nullReceivedFields_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> new CloneCommand(null, null));
-        assertThrows(NullPointerException.class, ()
-                -> new CloneCommand(null, new Occurrence("monthly", 5)));
+        assertThrows(NullPointerException.class, () ->
+             new CloneCommand(null, new Occurrence("monthly", 5)));
     }
 
     @Test
@@ -192,7 +192,7 @@ public class CloneCommandTest {
     }
 
     @Test
-    public void undo_undoCloneCommand_success() {
+    public void undo_undoCloneCommandNoOccurrence_success() {
         Model expectedModel = new ModelManager(model.getThrift(), new UserPrefs(), new PastUndoableCommands());
 
         Transaction transactionToClone = model.getFilteredTransactionList()
@@ -220,7 +220,7 @@ public class CloneCommandTest {
     }
 
     @Test
-    public void redo_redoCloneCommand_success() {
+    public void redo_redoCloneCommandNoOccurrence_success() {
         Model expectedModel = new ModelManager(model.getThrift(), new UserPrefs(), new PastUndoableCommands());
 
         Transaction transactionToClone = model.getFilteredTransactionList()

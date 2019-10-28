@@ -1,12 +1,15 @@
 package thrift.model.clone;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static thrift.testutil.Assert.assertThrows;
 
-import org.junit.jupiter.api.Test;
-import thrift.logic.commands.exceptions.CommandException;
-
 import java.util.Calendar;
+
+import org.junit.jupiter.api.Test;
+
+import thrift.logic.commands.exceptions.CommandException;
 
 public class OccurrenceTest {
 
