@@ -27,7 +27,7 @@ import thrift.logic.commands.UndoCommand;
 import thrift.logic.commands.UpdateCommand;
 import thrift.logic.commands.UpdateCommand.UpdateTransactionDescriptor;
 import thrift.logic.parser.exceptions.ParseException;
-import thrift.model.copy.Occurrence;
+import thrift.model.clone.Occurrence;
 import thrift.model.transaction.DescriptionOrRemarkContainsKeywordsPredicate;
 import thrift.model.transaction.Expense;
 import thrift.testutil.ExpenseBuilder;

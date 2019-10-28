@@ -13,7 +13,7 @@ import thrift.commons.core.index.Index;
 import thrift.logic.commands.exceptions.CommandException;
 import thrift.logic.parser.CliSyntax;
 import thrift.model.Model;
-import thrift.model.copy.Occurrence;
+import thrift.model.clone.Occurrence;
 import thrift.model.tag.Tag;
 import thrift.model.transaction.Description;
 import thrift.model.transaction.Expense;
@@ -44,12 +44,13 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
     public static final String MESSAGE_USAGE = COMMAND_WORD
             + ": Clones the transaction specified by its index number used in the displayed transaction list.\n"
             + "Parameters: " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer) "
-            + "[" + CliSyntax.PREFIX_OCCURRENCE + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]\n"
+            + "[" + CliSyntax.PREFIX_OCCURRENCE
+            + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES - must be positive integer)]\n"
             + "Example: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1 "
             + CliSyntax.PREFIX_OCCURRENCE + "monthly:5";
 
     public static final String MESSAGE_CLONE_TRANSACTION_SUCCESS = "Cloned transaction: %1$s";
-    public static final String MESSAGE_NUM_CLONED_TRANSACTIONS = "(Cloned %d times)";
+    public static final String MESSAGE_NUM_CLONED_TRANSACTIONS = "(Cloned %s %d times)";
 
     public static final String UNDO_SUCCESS = "Deleted cloned transaction: %1$s";
     public static final String REDO_SUCCESS = "Added cloned transaction: %1$s";
@@ -102,8 +103,9 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             }
         }
 
-        return new CommandResult(String.format(MESSAGE_CLONE_TRANSACTION_SUCCESS, clonedTransaction)
-                + "\n" + String.format(MESSAGE_NUM_CLONED_TRANSACTIONS, occurrence.getNumOccurrences()));
+        return new CommandResult(String.format(MESSAGE_CLONE_TRANSACTION_SUCCESS, transactionToClone)
+                + "\n" + String.format(MESSAGE_NUM_CLONED_TRANSACTIONS, occurrence.getFrequency(),
+                occurrence.getNumOccurrences()));
     }
 
     /**

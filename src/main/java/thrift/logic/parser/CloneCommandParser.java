@@ -6,7 +6,7 @@ import thrift.commons.core.Messages;
 import thrift.commons.core.index.Index;
 import thrift.logic.commands.CloneCommand;
 import thrift.logic.parser.exceptions.ParseException;
-import thrift.model.copy.Occurrence;
+import thrift.model.clone.Occurrence;
 
 /**
  * Parses input arguments and creates a new DeleteCommand object

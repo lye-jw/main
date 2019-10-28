@@ -1,4 +1,4 @@
-package thrift.model.copy;
+package thrift.model.clone;
 
 import static java.util.Objects.requireNonNull;
 
@@ -9,7 +9,7 @@ import thrift.logic.commands.exceptions.CommandException;
 
 /**
  * Represents how many times and with what frequency (how much time apart) a {@code Transaction} should be cloned.
- * Guarantees: immutable, all values are valid.
+ * Guarantees: immutable, frequency not null, numOccurences non-negative integer.
  */
 public class Occurrence {
     public static final String OCCURRENCE_CONSTRAINTS = "Occurrence must be in the format \"FREQUENCY:"
@@ -65,7 +65,7 @@ public class Occurrence {
     public int getFrequencyCalendarField() throws CommandException {
         switch (frequency) {
         case "daily":
-            return Calendar.DAY_OF_YEAR;
+            return Calendar.DATE;
         case "weekly":
             return Calendar.WEEK_OF_YEAR;
         case "monthly":
@@ -75,11 +75,6 @@ public class Occurrence {
         default:
             throw new CommandException(OCCURRENCE_CONSTRAINTS);
         }
-    }
-
-    @Override
-    public String toString() {
-        return frequency + " " + numOccurrences;
     }
 
     @Override
