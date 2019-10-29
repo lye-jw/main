@@ -9,7 +9,7 @@ import thrift.logic.commands.exceptions.CommandException;
 
 /**
  * Represents how many times and with what frequency (how much time apart) a {@code Transaction} should be cloned.
- * Guarantees: immutable, frequency not null, numOccurences non-negative integer.
+ * Guarantees: immutable, frequency not null, numOccurences valid according to frequency.
  */
 public class Occurrence {
     public static final String OCCURRENCE_CONSTRAINTS = "Occurrence must be in the format \"FREQUENCY:"

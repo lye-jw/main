@@ -190,7 +190,8 @@ public class ParserUtil {
     /**
      * Parses a String representing occurrence into an {@code Occurrence}.
      *
-     * @throws ParseException if the given {@code month} is invalid.
+     * @param inputOccurrence String to be parsed into Occurrence.
+     * @throws ParseException if given {@code inputOccurrence} has invalid {@code frequency} or {@code numOccurrences}.
      */
     public static Occurrence parseOccurrence(String inputOccurrence) throws ParseException {
         requireNonNull(inputOccurrence);
