@@ -36,10 +36,10 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             + "Format: "
             + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer)\n"
             + "[" + CliSyntax.PREFIX_OCCURRENCE
-            + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]\n"
+            + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]"
             + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
             + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 1 - 5 with \"yearly\", 1 - 12 with other frequencies"
-            + "Possible usage of " + COMMAND_WORD + ": \n"
+            + "\nPossible usage of " + COMMAND_WORD + ": \n"
             + "To clone the transaction at index 8 in the displayed transaction list: "
             + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "8\n"
             + "To clone the transaction at index 8 5 times across next 5 months (including current month):"
@@ -49,10 +49,10 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             + ": Clones the transaction specified by its index number used in the displayed transaction list.\n"
             + "Parameters: " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_OCCURRENCE
-            + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]\n"
+            + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]"
             + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
             + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 1 - 5 with \"yearly\", 1 - 12 with other frequencies"
-            + "Example: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1 "
+            + "\nExample: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1 "
             + CliSyntax.PREFIX_OCCURRENCE + "monthly:5";
 
     public static final String MESSAGE_CLONE_TRANSACTION_SUCCESS = "Cloned transaction: %1$s";
