@@ -38,7 +38,7 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             + "[" + CliSyntax.PREFIX_OCCURRENCE
             + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]\n"
             + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
-            + "\n- Valid NUMBER_OF_OCCURRENCES range is: 1 - 12"
+            + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 1 - 5 with \"yearly\", 1 - 12 with other frequencies"
             + "Possible usage of " + COMMAND_WORD + ": \n"
             + "To clone the transaction at index 8 in the displayed transaction list: "
             + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "8\n"
@@ -51,7 +51,7 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             + "[" + CliSyntax.PREFIX_OCCURRENCE
             + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]\n"
             + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
-            + "\n- Valid NUMBER_OF_OCCURRENCES range is: 1 - 12"
+            + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 1 - 5 with \"yearly\", 1 - 12 with other frequencies"
             + "Example: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1 "
             + CliSyntax.PREFIX_OCCURRENCE + "monthly:5";
 

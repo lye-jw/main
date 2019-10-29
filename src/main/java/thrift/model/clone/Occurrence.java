@@ -15,7 +15,7 @@ public class Occurrence {
     public static final String OCCURRENCE_CONSTRAINTS = "Occurrence must be in the format \"FREQUENCY:"
             + "NUMBER_OF_OCCURRENCES\"."
             + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
-            + "\n- Valid NUMBER_OF_OCCURRENCES range is: 1 - 12";
+            + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 1 - 5 with \"yearly\", 1 - 12 with other frequencies";
     private static final String[] validFrequencies = {"daily", "weekly", "monthly", "yearly"};
 
     private final String frequency;
