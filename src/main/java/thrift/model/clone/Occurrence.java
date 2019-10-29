@@ -13,8 +13,9 @@ import thrift.logic.commands.exceptions.CommandException;
  */
 public class Occurrence {
     public static final String OCCURRENCE_CONSTRAINTS = "Occurrence must be in the format \"FREQUENCY:"
-            + "NUMBER_OF_OCCURRENCES\".\nValid frequencies of occurrence are: \"daily\", \"weekly\", \"monthly\", "
-            + "\"yearly\"";
+            + "NUMBER_OF_OCCURRENCES\"."
+            + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
+            + "\n- Valid NUMBER_OF_OCCURRENCES range is: 1 - 12";
     private static final String[] validFrequencies = {"daily", "weekly", "monthly", "yearly"};
 
     private final String frequency;

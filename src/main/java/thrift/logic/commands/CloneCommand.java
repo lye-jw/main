@@ -35,6 +35,10 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             + ": Clones the transaction specified by its index number used in the displayed transaction list.\n"
             + "Format: "
             + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer)\n"
+            + "[" + CliSyntax.PREFIX_OCCURRENCE
+            + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]\n"
+            + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
+            + "\n- Valid NUMBER_OF_OCCURRENCES range is: 1 - 12"
             + "Possible usage of " + COMMAND_WORD + ": \n"
             + "To clone the transaction at index 8 in the displayed transaction list: "
             + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "8\n"
@@ -45,7 +49,9 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             + ": Clones the transaction specified by its index number used in the displayed transaction list.\n"
             + "Parameters: " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_OCCURRENCE
-            + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES - must be positive integer)]\n"
+            + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]\n"
+            + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
+            + "\n- Valid NUMBER_OF_OCCURRENCES range is: 1 - 12"
             + "Example: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1 "
             + CliSyntax.PREFIX_OCCURRENCE + "monthly:5";
 
@@ -63,6 +69,7 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
      * Creates a CloneCommand instance to clone an {@code Expense} or {@code Income}
      *
      * @param targetIndex from the displayed list of the transaction to be cloned
+     * @param occurrence representing frequency and number of times cloned items occur
      */
     public CloneCommand(Index targetIndex, Occurrence occurrence) {
         requireNonNull(targetIndex);
@@ -112,6 +119,7 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
      * Creates a clone of the transaction at {@link #targetIndex} of the displayed list.
      *
      * @param transactionToClone {@link Transaction} that a clone should be created of, with current Date.
+     * @param date that the cloned Transaction should contain.
      * @return {@link Expense} or {@link Income} clone of {@code transactionToClone} containing current Date.
      */
     private Transaction createClonedTransaction(Transaction transactionToClone, String date) {
