@@ -220,25 +220,25 @@ Fortunately, you can easily update such details in THRIFT. Here is what you do f
 
 . You initially have a "Curry Laksa" expense in THRIFT. It is at index 2 in the list.
 +
-image::update/updateUG/UpdateStep1.png[]
+image::update/updateUG/UpdateStep1.png[,550]
 +
 . When you realize the Laksa is not Curry Laksa and want to change the transaction's name, you type **update i/2 n/Laksa** into the command box and press kbd:[Enter].
 +
-image::update/updateUG/UpdateStep2.png[]
+image::update/updateUG/UpdateStep2.png[,550]
 +
 . You should see that the "Curry Laksa" transaction's name is updated to "Laksa". The status message also tells you what the original transaction was.
 +
-image::update/updateUG/UpdateStep3.png[]
+image::update/updateUG/UpdateStep3.png[,550]
 +
 . Later on, you want to change the name and value, as well as add a remark and tag. You type: +
 **update i/2 n/Asam Laksa v/12 r/My first time trying! t/Food t/Lunch** +
 and press kbd:[Enter].
 +
-image::update/updateUG/UpdateStep4.png[]
+image::update/updateUG/UpdateStep4.png[,550]
 +
 . You can see the updated details of the transaction at index 2. The status message tells you what the original transaction was. The transaction month's Expense and Balance trackers are also updated.
 +
-image::update/updateUG/UpdateStep5.png[]
+image::update/updateUG/UpdateStep5.png[,550]
 // end::update[]
 
 //tag::tag[]
@@ -344,7 +344,7 @@ The following is an explanation for the `clone` command:
 
 * Optional `OCCURRENCE` field is in the format `FREQUENCY:NUMBER_OF_OCCURRENCES`. You use it to create multiple clones,  with the 1st clone on the current day.
 
-- `FREQUENCY` is how often or how far apart the clones occur. Valid values are `daily`, `weekly`, `monthly` and `yearly`.
+- `FREQUENCY` is how often or how far apart the clones occur. Valid values are: `daily`, `weekly`, `monthly` and `yearly`.
 
 - `NUMBER_OF_OCCURRENCES` determines how many clones are produced.
 
@@ -364,15 +364,15 @@ NOTE: The following example uses the displayed list of all existing transactions
 
 . You have the salary income entry you received on 31/10/2019 in the list. It is at index 4.
 +
-image::clone/cloneUG/CloneStep1.png[]
+image::clone/cloneUG/CloneStep1.png[,550]
 
 . To create clones of the salary entry for 31/10/2019 and the next 11 months up to 30 September 2020, you type **clone i/4 o/monthly:12** and press kbd:[Enter].
 +
-image::clone/cloneUG/CloneStep2.png[]
+image::clone/cloneUG/CloneStep2.png[,550]
 
 . You can see that 12 clones of the transaction at index 4 are created.
 +
-image::clone/cloneUG/CloneStep3.png[]
+image::clone/cloneUG/CloneStep3.png[,550]
 // end::clone[]
 
 [[UndoTag]]
