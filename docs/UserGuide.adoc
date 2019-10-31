@@ -200,12 +200,16 @@ Made a mistake when creating a transaction? Have new details for an existing tra
 ==== Command Syntax:
 `update i/INDEX [n/NEW_NAME] [v/NEW_VALUE] [r/NEW_REMARK] [t/NEW_TAG] ...`
 
-Here is an explanation of the `update` command:
+Here is an explanation for the `update` command:
 ****
 * Use this command to update the fields of the transaction at the specified `INDEX`.
-** `INDEX` refers to the index number currently shown in the displayed list, and must be a *positive integer*.
+
+- `INDEX` refers to the index number currently shown in the displayed list, and must be a *positive integer*.
+
 * You can update any or all of the transaction's **name**, **value**, **remark** and **tags** fields. For information on these fields, see <<TransactionDetailsTag, here>>.
+
 * All fields are optional, but you must specify at least one field to be updated.
+
 * You can update multiple fields at once.
 ****
 
@@ -218,22 +222,22 @@ Fortunately, you can easily update such details in THRIFT. Here is what you do f
 +
 image::update/updateUG/UpdateStep1.png[]
 +
-. When you realize the Laksa is not Curry Laksa and want to change the transaction's name, you type **update i/2 n/Laksa** into the command box and hit kbd:[Enter].
+. When you realize the Laksa is not Curry Laksa and want to change the transaction's name, you type **update i/2 n/Laksa** into the command box and press kbd:[Enter].
 +
 image::update/updateUG/UpdateStep2.png[]
 +
 . You should see that the "Curry Laksa" transaction's name is updated to "Laksa". The status message also tells you what the original transaction was.
 +
 image::update/updateUG/UpdateStep3.png[]
-
-. Later on, you want to change the name and value, as well as add a remark and tag. You type +
++
+. Later on, you want to change the name and value, as well as add a remark and tag. You type: +
 **update i/2 n/Asam Laksa v/12 r/My first time trying! t/Food t/Lunch** +
-and hit kbd:[Enter].
-
+and press kbd:[Enter].
++
 image::update/updateUG/UpdateStep4.png[]
-
++
 . You can see the updated details of the transaction at index 2. The status message tells you what the original transaction was. The transaction month's Expense and Balance trackers are also updated.
-
++
 image::update/updateUG/UpdateStep5.png[]
 // end::update[]
 
@@ -324,35 +328,45 @@ The convert command allows you to convert money from one currency to another.
 // tag::clone[]
 [[CloneTag]]
 === Cloning a transaction: `clone`
-Occasionally, you may want to create multiple copies of a transaction for recurring incomes or expenses, such as a yearly donation or monthly bills. Simply use the `clone` feature to achieve this.
+Occasionally, you may want to copy a transaction, or create multiple copies of a transaction for recurring incomes or expenses such as a yearly donation or monthly bills. Simply use the `clone` feature to achieve this.
 
 ==== Command syntax:
 `clone i/INDEX [o/OCCURRENCE]`
 
-The following is an explanation for `clone`:
+The following is an explanation for the `clone` command:
 
 ****
 * Clones (creates duplicate(s) of) transaction at `INDEX`. Clone(s) produced are added to a new index at the bottom of the list.
+
 - `INDEX` refers to the index currently shown in the displayed list, and must be a positive integer.
+
 * If you use `clone i/INDEX` without `o/OCCURRENCE` field, one clone is created for the current day.
+
 * Optional `OCCURRENCE` field is in the format `FREQUENCY:NUMBER_OF_OCCURRENCES`. You use it to create multiple clones,  with the 1st clone on the current day.
+
 - `FREQUENCY` is how often or how far apart the clones occur. Valid values are `daily`, `weekly`, `monthly` and `yearly`.
+
 - `NUMBER_OF_OCCURRENCES` determines how many clones are produced.
+
 - The maximum `NUMBER_OF_OCCURRENCES` is **5 for `yearly`** and **12 for `daily`, `weekly` and `monthly`**.
+
+* For monthly cloning, clones are created on the same day of the following months, e.g. **clone i/1 o/monthly:3** on 20 November 2019 creates clones on 20 November 2019, 20 December 2019 and 20 January 2020.
+
+- For special cases where following months do not have the day a transaction was cloned on, clones are created on the last day of those months, e.g. **clone i/1 o/monthly:3** on 31 October 2019 creates clones on 31 October 2019, 30 November 2019 and 31 December 2019.
 ****
 
 ==== Example usage: +
-You receive your fixed salary on the 29th of every month. You don't want to tediously add your salary to THRIFT every month, so you add clones of your salary income for the next year at one go.
+You receive your fixed salary on the last day of every month. You don't want to tediously add your salary to THRIFT every month, so you add clones of your salary income for the next year at one go.
 
-You do the following on 29 October 2019:
+You do the following on 31 October 2019:
 
 NOTE: The following example uses the displayed list of all existing transactions.
 
-. You have the salary income entry you received on 29/10/2019 in the list. It is at index 4.
+. You have the salary income entry you received on 31/10/2019 in the list. It is at index 4.
 +
 image::clone/cloneUG/CloneStep1.png[]
 
-. To create clones of the salary entry for 29/10/2019 and the next 11 months up to 29 September 2020, you type **clone i/4 o/monthly:12** and hit kbd:[Enter].
+. To create clones of the salary entry for 31/10/2019 and the next 11 months up to 30 September 2020, you type **clone i/4 o/monthly:12** and press kbd:[Enter].
 +
 image::clone/cloneUG/CloneStep2.png[]
 
