@@ -210,25 +210,25 @@ Fortunately, you can easily update such details in THRIFT. Here is what you do f
 
 . You initially have a "Curry Laksa" expense in THRIFT. It is at index 2 in the list.
 +
-image::/images/update/UpdateStep1.png[]
+image::update/updateUG/UpdateStep1.png[]
 +
 . When you realize the Laksa is not Curry Laksa and want to change the transaction's name, you type **update i/2 n/Laksa** into the command box and hit kbd:[Enter].
 +
-image::/images/update/UpdateStep2.png[]
+image::update/updateUG/UpdateStep2.png[]
 +
 . You should see that the "Curry Laksa" transaction's name is updated to "Laksa". The status message also tells you what the original transaction was.
 +
-image::/images/update/UpdateStep3.png[]
+image::update/updateUG/UpdateStep3.png[]
 
 . Later on, you want to change the name and value, as well as add a remark and tag. You type +
 **update i/2 n/Asam Laksa v/12 r/My first time trying! t/Food t/Lunch** +
 and hit kbd:[Enter].
 
-image::/images/update/UpdateStep4.png[]
+image::update/updateUG/UpdateStep4.png[]
 
 . You can see the updated details of the transaction at index 2. The status message tells you what the original transaction was. The transaction month's Expense and Balance trackers are also updated.
 
-image::/images/update/UpdateStep5.png[]
+image::update/updateUG/UpdateStep5.png[]
 // end::update[]
 
 //tag::tag[]
@@ -323,6 +323,8 @@ Occasionally, you may want to create multiple copies of a transaction for recurr
 ==== Command syntax:
 `clone i/INDEX [o/OCCURRENCE]`
 
+The following is an explanation for `clone`:
+
 ****
 * Clones (creates duplicate(s) of) transaction at `INDEX`. Clone(s) produced are added to a new index at the bottom of the list.
 - `INDEX` refers to the index currently shown in the displayed list, and must be a positive integer.
@@ -342,15 +344,15 @@ NOTE: The following example uses the displayed list of all existing transactions
 
 . You have the salary income entry you received on 29/10/2019 in the list. It is at index 4.
 +
-image::/images/clone/CloneStep1.png[]
+image::clone/cloneUG/CloneStep1.png[]
 
 . To create clones of the salary entry for 29/10/2019 and the next 11 months up to 29 September 2020, you type **clone i/4 o/monthly:12** and hit kbd:[Enter].
 +
-image::/images/clone/CloneStep2.png[]
+image::clone/cloneUG/CloneStep2.png[]
 
 . You can see that 12 clones of the transaction at index 4 are created.
 +
-image::/images/clone/CloneStep3.png[]
+image::clone/cloneUG/CloneStep3.png[]
 // end::clone[]
 
 [[UndoTag]]
