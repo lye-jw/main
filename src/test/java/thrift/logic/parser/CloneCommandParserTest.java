@@ -29,7 +29,12 @@ public class CloneCommandParserTest {
     public void parse_validArgs_returnsCloneCommand() {
         // Clone with index only
         assertParseSuccess(parser, CommandTestUtil.INDEX_TOKEN + "2", new CloneCommand(
-                TypicalIndexes.INDEX_SECOND_TRANSACTION, new Occurrence("daily", 1)));
+                TypicalIndexes.INDEX_SECOND_TRANSACTION, new Occurrence("daily", 0)));
+
+        // Clone with index and occurrence number of 0
+        assertParseSuccess(parser, CommandTestUtil.INDEX_TOKEN + "1" + CommandTestUtil.OCCURRENCE_TOKEN
+                + "weekly:0", new CloneCommand(TypicalIndexes.INDEX_FIRST_TRANSACTION,
+                new Occurrence("weekly", 0)));
 
         // Clone with index and valid occurrence
         assertParseSuccess(parser, CommandTestUtil.INDEX_TOKEN + "3" + CommandTestUtil.OCCURRENCE_TOKEN
@@ -69,10 +74,6 @@ public class CloneCommandParserTest {
         // negative integer value input for occurrence
         assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "1" + CommandTestUtil.OCCURRENCE_TOKEN
                 + "daily:-3", MESSAGE_INVALID_FORMAT);
-
-        // input 0 for occurrence
-        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "1" + CommandTestUtil.OCCURRENCE_TOKEN
-                + "weekly:0", MESSAGE_INVALID_FORMAT);
 
         // not integer value input for occurrence
         assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "1" + CommandTestUtil.OCCURRENCE_TOKEN

@@ -203,7 +203,7 @@ public class ParserUtil {
             }
 
             int numOccurrences = Integer.parseInt(occurrenceParts[1].trim());
-            if (numOccurrences <= 0 || numOccurrences > 12 || ("yearly".equals(frequency) && numOccurrences > 5)) {
+            if (numOccurrences < 0 || numOccurrences > 12 || ("yearly".equals(frequency) && numOccurrences > 5)) {
                 throw new ParseException(Occurrence.OCCURRENCE_CONSTRAINTS);
             }
             return new Occurrence(frequency, numOccurrences);

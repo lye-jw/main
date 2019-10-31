@@ -6,9 +6,12 @@ import static thrift.model.transaction.TransactionDate.DATE_FORMATTER;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Logger;
 
+import thrift.commons.core.LogsCenter;
 import thrift.commons.core.Messages;
 import thrift.commons.core.index.Index;
 import thrift.logic.commands.exceptions.CommandException;
@@ -30,6 +33,8 @@ import thrift.ui.TransactionListPanel;
  */
 public class CloneCommand extends ScrollingCommand implements Undoable {
 
+    private static final Logger logger = LogsCenter.getLogger(CloneCommand.class);
+
     public static final String COMMAND_WORD = "clone";
 
     public static final String HELP_MESSAGE = COMMAND_WORD
@@ -38,8 +43,10 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer)\n"
             + "[" + CliSyntax.PREFIX_OCCURRENCE
             + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]"
-            + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
-            + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 1 - 5 with \"yearly\", 1 - 12 with other frequencies"
+            + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\"."
+            + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 0 - 5 with \"yearly\", 0 - 12 with other frequencies.\n"
+            + "If NUMBER_OF_OCCURRENCES is 0, one clone will be created on the same date as original "
+            + "transaction as if\nno " + CliSyntax.PREFIX_OCCURRENCE + "OCCURRENCE parameter was input."
             + "\nPossible usage of " + COMMAND_WORD + ": \n"
             + "To clone the transaction at index 8 in the displayed transaction list: "
             + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "8\n"
@@ -51,13 +58,15 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             + "Parameters: " + CliSyntax.PREFIX_INDEX + "INDEX (must be a positive integer) "
             + "[" + CliSyntax.PREFIX_OCCURRENCE
             + "OCCURRENCE (FREQUENCY:NUMBER_OF_OCCURRENCES)]"
-            + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\""
-            + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 1 - 5 with \"yearly\", 1 - 12 with other frequencies"
+            + "\n- Valid FREQUENCY values are: \"daily\", \"weekly\", \"monthly\", \"yearly\"."
+            + "\n- Valid NUMBER_OF_OCCURRENCES ranges are: 0 - 5 with \"yearly\", 0 - 12 with other frequencies.\n"
+            + "If NUMBER_OF_OCCURRENCES is 0, one clone will be created on the same date as original "
+            + "transaction as if\nno " + CliSyntax.PREFIX_OCCURRENCE + "OCCURRENCE parameter was input."
             + "\nExample: " + COMMAND_WORD + " " + CliSyntax.PREFIX_INDEX + "1 "
             + CliSyntax.PREFIX_OCCURRENCE + "monthly:5";
 
     public static final String MESSAGE_CLONE_TRANSACTION_SUCCESS = "Cloned transaction: %1$s";
-    public static final String MESSAGE_NUM_CLONED_TRANSACTIONS = "(Cloned %s %d times)";
+    public static final String MESSAGE_NUM_CLONED_TRANSACTIONS = "(Cloned %s %d time(s))";
 
     public static final String UNDO_SUCCESS = "Deleted cloned transaction(s):\n%1$s";
     public static final String REDO_SUCCESS = "Added cloned transaction(s):\n%1$s";
@@ -76,6 +85,8 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
     public CloneCommand(Index targetIndex, Occurrence occurrence) {
         requireNonNull(targetIndex);
         requireNonNull(occurrence);
+        assert targetIndex.getZeroBased() >= 0 : "Index of transaction to be cloned is negative";
+        assert occurrence.getNumOccurrences() >= 0 : "Number of occurrences for clones not positive integer";
         this.targetIndex = targetIndex;
         this.occurrence = occurrence;
         this.clonedTransactionList = new ArrayList<>();
@@ -92,10 +103,24 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
         }
 
         Transaction transactionToClone = lastShownList.get(targetIndex.getZeroBased());
-        frequencyCalendarField = occurrence.getFrequencyCalendarField();
+        Date originalDate = transactionToClone.getDate().getDate();
 
-        for (int i = 0; i < occurrence.getNumOccurrences(); i++) {
+        frequencyCalendarField = occurrence.getFrequencyCalendarField();
+        assert (frequencyCalendarField == Calendar.DATE) || (frequencyCalendarField == Calendar.WEEK_OF_YEAR) ||
+                (frequencyCalendarField == Calendar.MONTH) || (frequencyCalendarField == Calendar.YEAR)
+                : "Frequency of occurrence for clones not converted to a valid Calendar field";
+
+        for (int i = 0; i <= occurrence.getNumOccurrences(); i++) {
+            // If cloning multiple times, skip step to clone a transaction on date of original transaction
+            if (occurrence.getNumOccurrences() > 0 && i == 0) {
+                continue;
+            }
+
+            // Produce the date attribute of cloned transaction
             Calendar calendar = Calendar.getInstance();
+            if (occurrence.getNumOccurrences() > 0) {
+                calendar.setTime(originalDate);
+            }
             calendar.add(frequencyCalendarField, i);
             String date = DATE_FORMATTER.format(calendar.getTime());
 
@@ -103,19 +128,30 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
             clonedTransactionList.add(clonedTransaction);
             if (clonedTransaction instanceof Expense) {
                 model.addExpense((Expense) clonedTransaction);
-            } else if (clonedTransaction instanceof Income) {
+            } else {
+                assert clonedTransaction instanceof Income : "Transaction to Clone not of type Expense or Income";
                 model.addIncome((Income) clonedTransaction);
             }
+
             // Use null comparison instead of requireNonNull(transactionListPanel) as current JUnit tests are unable to
             // handle JavaFX initialization
             if (transactionListPanel != null && model.isInView(clonedTransaction)) {
                 transactionListPanel.getTransactionListView().scrollTo(model.getFilteredTransactionList().size() - 1);
             }
+
+            // For single Clone operation, end Cloning after one iteration
+            if (occurrence.getNumOccurrences() == 0) {
+                logger.info("CLONED transaction [ " + clonedTransaction + " ] [1 TIME]");
+                break;
+            }
+
+            logger.info("CLONED transaction [ " + clonedTransaction + " ] [" + i + " TIMES]");
         }
 
+        int actualTimesCloned = (occurrence.getNumOccurrences() == 0) ? 1 : occurrence.getNumOccurrences();
+        String actualFrequency = (occurrence.getNumOccurrences() == 0) ? "for today" : occurrence.getFrequency();
         return new CommandResult(String.format(MESSAGE_CLONE_TRANSACTION_SUCCESS, transactionToClone)
-                + "\n" + String.format(MESSAGE_NUM_CLONED_TRANSACTIONS, occurrence.getFrequency(),
-                occurrence.getNumOccurrences()));
+                + "\n" + String.format(MESSAGE_NUM_CLONED_TRANSACTIONS, actualFrequency, actualTimesCloned));
     }
 
     /**
@@ -151,7 +187,7 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
     public String undo(Model model) {
         requireAllNonNull(model, occurrence);
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i < occurrence.getNumOccurrences(); i++) {
+        for (int i = 0; i <= occurrence.getNumOccurrences(); i++) {
             Transaction deleteTransaction = model.deleteLastTransaction();
             sb.append(deleteTransaction).append("\n");
         }
