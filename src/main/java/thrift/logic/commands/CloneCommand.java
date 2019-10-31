@@ -33,8 +33,6 @@ import thrift.ui.TransactionListPanel;
  */
 public class CloneCommand extends ScrollingCommand implements Undoable {
 
-    private static final Logger logger = LogsCenter.getLogger(CloneCommand.class);
-
     public static final String COMMAND_WORD = "clone";
 
     public static final String HELP_MESSAGE = COMMAND_WORD
@@ -71,6 +69,8 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
     public static final String UNDO_SUCCESS = "Deleted cloned transaction(s):\n%1$s";
     public static final String REDO_SUCCESS = "Added cloned transaction(s):\n%1$s";
 
+    private static final Logger logger = LogsCenter.getLogger(CloneCommand.class);
+
     private final Index targetIndex;
     private final Occurrence occurrence;
     private int frequencyCalendarField;
@@ -106,8 +106,8 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
         Date originalDate = transactionToClone.getDate().getDate();
 
         frequencyCalendarField = occurrence.getFrequencyCalendarField();
-        assert (frequencyCalendarField == Calendar.DATE) || (frequencyCalendarField == Calendar.WEEK_OF_YEAR) ||
-                (frequencyCalendarField == Calendar.MONTH) || (frequencyCalendarField == Calendar.YEAR)
+        assert (frequencyCalendarField == Calendar.DATE) || (frequencyCalendarField == Calendar.WEEK_OF_YEAR)
+                || (frequencyCalendarField == Calendar.MONTH) || (frequencyCalendarField == Calendar.YEAR)
                 : "Frequency of occurrence for clones not converted to a valid Calendar field";
 
         for (int i = 0; i <= occurrence.getNumOccurrences(); i++) {

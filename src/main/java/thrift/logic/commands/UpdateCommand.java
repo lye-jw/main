@@ -31,7 +31,6 @@ import thrift.ui.TransactionListPanel;
  * Updates the details of an existing transaction in THRIFT.
  */
 public class UpdateCommand extends ScrollingCommand implements Undoable {
-    private static final Logger logger = LogsCenter.getLogger(UpdateCommand.class);
 
     public static final String COMMAND_WORD = "update";
 
@@ -71,6 +70,8 @@ public class UpdateCommand extends ScrollingCommand implements Undoable {
     public static final String MESSAGE_NOT_UPDATED = "At least one field to update must be provided.";
     public static final String UNDO_SUCCESS = "Updated Transaction: %1$s\nOriginal: %2$s";
     public static final String REDO_SUCCESS = "Updated Transaction: %1$s\nOriginal: %2$s";
+
+    private static final Logger logger = LogsCenter.getLogger(UpdateCommand.class);
 
     private final Index index;
     private final UpdateTransactionDescriptor updateTransactionDescriptor;
