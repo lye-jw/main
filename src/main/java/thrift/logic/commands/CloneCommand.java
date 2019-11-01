@@ -110,46 +110,14 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
                 || (frequencyCalendarField == Calendar.MONTH) || (frequencyCalendarField == Calendar.YEAR)
                 : "Frequency of occurrence for clones not converted to a valid Calendar field";
 
-        for (int i = 0; i <= occurrence.getNumOccurrences(); i++) {
-            // If cloning multiple times, skip step to clone a transaction on date of original transaction
-            if (occurrence.getNumOccurrences() > 0 && i == 0) {
-                continue;
-            }
+        executeCloneOperation(originalDate, transactionToClone, model, transactionListPanel);
 
-            // Produce the date attribute of cloned transaction
-            Calendar calendar = Calendar.getInstance();
-            if (occurrence.getNumOccurrences() > 0) {
-                calendar.setTime(originalDate);
-            }
-            calendar.add(frequencyCalendarField, i);
-            String date = DATE_FORMATTER.format(calendar.getTime());
-
-            Transaction clonedTransaction = createClonedTransaction(transactionToClone, date);
-            clonedTransactionList.add(clonedTransaction);
-            if (clonedTransaction instanceof Expense) {
-                model.addExpense((Expense) clonedTransaction);
-            } else {
-                assert clonedTransaction instanceof Income : "Transaction to Clone not of type Expense or Income";
-                model.addIncome((Income) clonedTransaction);
-            }
-
-            // Use null comparison instead of requireNonNull(transactionListPanel) as current JUnit tests are unable to
-            // handle JavaFX initialization
-            if (transactionListPanel != null && model.isInView(clonedTransaction)) {
-                transactionListPanel.getTransactionListView().scrollTo(model.getFilteredTransactionList().size() - 1);
-            }
-
-            // For single Clone operation, end Cloning after one iteration
-            if (occurrence.getNumOccurrences() == 0) {
-                logger.info("CLONED transaction [ " + clonedTransaction + " ] [1 TIME]");
-                break;
-            }
-
-            logger.info("CLONED transaction [ " + clonedTransaction + " ] [" + i + " TIMES]");
+        int actualTimesCloned = occurrence.getNumOccurrences();
+        String actualFrequency = occurrence.getFrequency();
+        if (occurrence.getNumOccurrences() == 0) {
+            actualTimesCloned = 1;
+            actualFrequency = "for today";
         }
-
-        int actualTimesCloned = (occurrence.getNumOccurrences() == 0) ? 1 : occurrence.getNumOccurrences();
-        String actualFrequency = (occurrence.getNumOccurrences() == 0) ? "for today" : occurrence.getFrequency();
         return new CommandResult(String.format(MESSAGE_CLONE_TRANSACTION_SUCCESS, transactionToClone)
                 + "\n" + String.format(MESSAGE_NUM_CLONED_TRANSACTIONS, actualFrequency, actualTimesCloned));
     }
@@ -171,8 +139,72 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
         if (transactionToClone instanceof Expense) {
             return new Expense(clonedDescription, clonedValue, clonedRemark, currentDate, clonedTags);
         } else {
+            assert transactionToClone instanceof Income : "Transaction to clone not of type Expense or Income";
             return new Income(clonedDescription, clonedValue, clonedRemark, currentDate, clonedTags);
         }
+    }
+
+    /**
+     * Adds cloned transactions to the existing {@link Model} and scrolls to their list entries in the
+     * {@link TransactionListPanel}.
+     *
+     * @param originalDate of the original transaction.
+     * @param transactionToClone The original transaction to be clone.
+     * @param model The {@link Model} which cloned transactions should be added to.
+     * @param transactionListPanel The {@link TransactionListPanel} that should scroll to the list entry of clones.
+     */
+    private void executeCloneOperation(Date originalDate, Transaction transactionToClone, Model model,
+                                       TransactionListPanel transactionListPanel) {
+        requireAllNonNull(originalDate, transactionToClone, model);
+        StringBuilder logDates = new StringBuilder("Clones created for: ");
+
+        int cloneNumber;
+        for (cloneNumber = 0; cloneNumber <= occurrence.getNumOccurrences(); cloneNumber++) {
+            // If cloning multiple times, skip step to clone a transaction on date of original transaction
+            if (occurrence.getNumOccurrences() > 0 && cloneNumber == 0) {
+                continue;
+            }
+
+            String date = getDateOfClone(originalDate, cloneNumber);
+
+            Transaction clonedTransaction = createClonedTransaction(transactionToClone, date);
+            clonedTransactionList.add(clonedTransaction);
+            if (clonedTransaction instanceof Expense) {
+                model.addExpense((Expense) clonedTransaction);
+            } else {
+                assert clonedTransaction instanceof Income : "Transaction to Clone not of type Expense or Income";
+                model.addIncome((Income) clonedTransaction);
+            }
+
+            logDates.append(date).append(", ");
+
+            // Use null comparison instead of requireNonNull(transactionListPanel) as current JUnit tests are unable to
+            // handle JavaFX initialization
+            if (transactionListPanel != null && model.isInView(clonedTransaction)) {
+                transactionListPanel.getTransactionListView().scrollTo(model.getFilteredTransactionList().size() - 1);
+            }
+        }
+
+        cloneNumber = (occurrence.getNumOccurrences() == 0) ? cloneNumber : cloneNumber - 1;
+        logDates.delete(logDates.length() - 2, logDates.length());
+        logger.info("CLONED transaction [ " + transactionToClone + " ] [" + cloneNumber + " TIMES]\n"
+                + logDates);
+    }
+
+    /** Produce the date attribute of a cloned transaction.
+     *
+     * @param originalDate of the original transaction to be cloned.
+     * @param dateFieldIncrement to be added to the relevant date field of {@code originalDate}.
+     * @return {@code Date} String that cloned transaction contains.
+     */
+    private String getDateOfClone(Date originalDate, int dateFieldIncrement) {
+        requireAllNonNull(originalDate, dateFieldIncrement);
+        Calendar calendar = Calendar.getInstance();
+        if (occurrence.getNumOccurrences() > 0) {
+            calendar.setTime(originalDate);
+        }
+        calendar.add(frequencyCalendarField, dateFieldIncrement);
+        return DATE_FORMATTER.format(calendar.getTime());
     }
 
     @Override
@@ -187,7 +219,8 @@ public class CloneCommand extends ScrollingCommand implements Undoable {
     public String undo(Model model) {
         requireAllNonNull(model, occurrence);
         StringBuilder sb = new StringBuilder();
-        for (int i = 0; i <= occurrence.getNumOccurrences(); i++) {
+        int actualTimesCloned = (occurrence.getNumOccurrences() == 0) ? 1 : occurrence.getNumOccurrences();
+        for (int i = 0; i < actualTimesCloned; i++) {
             Transaction deleteTransaction = model.deleteLastTransaction();
             sb.append(deleteTransaction).append("\n");
         }
