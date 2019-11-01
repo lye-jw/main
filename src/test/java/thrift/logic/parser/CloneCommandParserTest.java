@@ -22,7 +22,10 @@ public class CloneCommandParserTest {
     public void parse_missingParts_failure() {
         //no index specified
         assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN, MESSAGE_INVALID_FORMAT);
-        assertParseFailure(parser, CommandTestUtil.OCCURRENCE_TOKEN, MESSAGE_INVALID_FORMAT);
+
+        // no occurrence specified with "o/" prefix
+        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "1"
+                + CommandTestUtil.OCCURRENCE_TOKEN, MESSAGE_INVALID_FORMAT);
     }
 
     @Test
@@ -96,5 +99,15 @@ public class CloneCommandParserTest {
                 + "monthly:13", MESSAGE_INVALID_FORMAT);
         assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "1" + CommandTestUtil.OCCURRENCE_TOKEN
                 + "yearly:6", MESSAGE_INVALID_FORMAT);
+
+        // No number of occurrence input
+        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "2" + CommandTestUtil.OCCURRENCE_TOKEN
+                + "daily", MESSAGE_INVALID_FORMAT);
+
+        // Extra parts of occurrence parameter input
+        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "2" + CommandTestUtil.OCCURRENCE_TOKEN
+                + "weekly:10:11", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, CommandTestUtil.INDEX_TOKEN + "2" + CommandTestUtil.OCCURRENCE_TOKEN
+                + "monthly:5:6:7:gsdfgfdsg:sfaf:3yerst5:sf5sr447u:", MESSAGE_INVALID_FORMAT);
     }
 }
