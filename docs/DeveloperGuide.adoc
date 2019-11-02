@@ -600,8 +600,27 @@ Step 4. `UpdateCommand#execute` replaces original transaction in the list with t
 
 image::update/updateDG/UpdateStep4Part1.png[,650]
 image::update/updateDG/UpdateStep4Part2.png[,650]
-.Replacement of original transaction with updated transaction in `UpdateCommand#execute()`
+.Replacement of original transaction with updated transaction by `UpdateCommand#execute()`
 image::update/updateDG/UpdateStep4Part3.png[,650]
+
+The following code snippet from `UpdateCommand#execute` shows the creation of an updated transaction and the replacement of the original transaction with the updated one:
+
+.UpdateCommand#execute snippet
+[source, java]
+----
+// updateTransactionDescriptor is a class containing details to be contained by the new updated transaction.
+
+transactionToUpdate = lastShownList.get(index.getZeroBased());
+
+// ...Status message code omitted...
+
+updatedTransaction = createUpdatedTransaction(transactionToUpdate, updateTransactionDescriptor);
+
+// ...Logging and status message code omitted...
+
+actualIndex = model.getIndexInFullTransactionList(transactionToUpdate).get();
+model.setTransactionWithIndex(actualIndex, updatedTransaction);
+----
 
 ===== Execution observed by user
 The following activity diagram gives an overview of what the user observes when executing **update** command
@@ -650,7 +669,7 @@ The following methods are concrete implementations unique to **clone**:
 
 The following Sequence Diagram illustrates **clone** command execution:
 
-.Sequence diagram for **clone** execution on an `**Expense**`
+.Sequence diagram for **clone** execution with 12 occurrences on an `**Expense**`
 image::clone/cloneDG/CloneSequenceDiagram.png[]
 
 ===== Example of usage
@@ -849,10 +868,6 @@ and still be able to filter by a combination of the different arguments.
 Eventually we may decide to use a combination of both alternatives as it is possible that different arguments are easier to
 implement using different methods.
 // end::Filtering transactions[]
-
-// tag::undoredo[]
-//=== [Proposed] Undo/Redo feature
-//==== Proposed Implementation
 
 //tag::dataencryption[]
 === [Proposed] Data encryption
