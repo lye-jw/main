@@ -583,29 +583,29 @@ Step 1. The user starts up the application with an initial list loaded from exte
 .Example list on startup
 image::update/updateDG/UpdateStep1.png[,650]
 
-Step 2. The user inputs **update i/1 n/Government Bursary v/600** to update the 1st transaction's name to "Government Bursary" and value to "600". Input is parsed by `UpdateCommandParser#parse` which creates an `**UpdateCommand**`.
+Step 2. The user inputs **update i/1 n/Government Bursary v/600** to update the 1st transaction's name to "Government Bursary" and value to "600". Input is parsed by `UpdateCommandParser#parse()` which creates an `**UpdateCommand**`.
 
 [NOTE]
-The 1st transaction specified here is an `**Income**`
+The 1st transaction specified here is an `**Income**`.
 
 .Example user input for update command
 image::update/updateDG/UpdateStep2.png[,650]
 
-Step 3. `UpdateCommand#execute` creates a new transaction that reflects the changes and gets the index of current transaction to be updated.
+Step 3. `UpdateCommand#execute()` creates a new transaction that reflects the changes and gets the index of current transaction to be updated.
 
 .Creation of new updated transaction in `UpdateCommand#execute()`
 image::update/updateDG/UpdateStep3.png[,650]
 
-Step 4. `UpdateCommand#execute` replaces original transaction in the list with the updated transaction.
+Step 4. `UpdateCommand#execute()` replaces original transaction in the list with the updated transaction.
 
 image::update/updateDG/UpdateStep4Part1.png[,650]
 image::update/updateDG/UpdateStep4Part2.png[,650]
 .Replacement of original transaction with updated transaction by `UpdateCommand#execute()`
 image::update/updateDG/UpdateStep4Part3.png[,650]
 
-The following code snippet from `UpdateCommand#execute` shows the creation of an updated transaction and the replacement of the original transaction with the updated one:
+The following code snippet from `UpdateCommand#execute()` shows the creation of an updated transaction and the replacement of the original transaction with the updated one:
 
-.UpdateCommand#execute snippet
+.UpdateCommand#execute()
 [source, java]
 ----
 // updateTransactionDescriptor is a class containing details to be contained by the new updated transaction.
@@ -623,10 +623,10 @@ model.setTransactionWithIndex(actualIndex, updatedTransaction);
 ----
 
 ===== Execution observed by user
-The following activity diagram gives an overview of what the user observes when executing **update** command
+The following activity diagram gives an overview of what the user observes when executing **update** command:
 
 :figure-caption: Figure
-.Activity Diagram for execution of update command
+.Activity diagram for execution of update command
 image::update/updateDG/UpdateActivityDiagram.png[]
 
 ==== Design considerations
@@ -684,7 +684,7 @@ Step 1. The user starts up the application with an initial list loaded from exte
 .Example list on startup
 image::clone/cloneDG/CloneStep1.png[,650]
 
-Step 2 (i). The user inputs **clone i/4** or **clone i/4 o/daily:0** to create 1 copy of the transaction at index 4 on the date when command is called - for this example, current date when command is used on 02/12/2019.
+Step 2 (i). The user inputs **clone i/4** or **clone i/4 o/daily:0** to create 1 copy of the transaction at index 4 on the date when command is called - for this example, current date when command is used is 02/12/2019.
 
 image::clone/cloneDG/CloneStep2Part1.png[,650]
 .Creating one copy of transaction at index 4 and adding it to the list.
@@ -692,11 +692,11 @@ image::clone/cloneDG/CloneStep2Part2.png[,650]
 
 Step 2 (ii). The user removes the clone created in Step 2 (i) using **delete i/6** command.
 
-Step 3. The user inputs **clone i/4 o/monthly:12** to create 12 copies of the transaction at index 4 with dates one month apart from each other (30/12/2019 to 30/11/2020), and add them to the list. Input is parsed by `CloneCommandParser#parse` which creates a `**CloneCommand**`.
+Step 3. The user inputs **clone i/4 o/monthly:12** to create 12 copies of the transaction at index 4 with dates one month apart from each other (30/12/2019 to 30/11/2020), and add them to the list. Input is parsed by `CloneCommandParser#parse()` which creates a `**CloneCommand**`.
 
 image::clone/cloneDG/CloneStep3.png[,650]
 
-Step 4. `CloneCommand#execute` creates copies of the transaction to be cloned with their dates of occurrence set one month apart. The copies are then added to the list.
+Step 4. `CloneCommand#execute()` creates copies of the transaction to be cloned with their dates of occurrence set one month apart. The copies are then added to the list.
 
 image::clone/cloneDG/CloneStep4Part1.png[,650]
 image::clone/cloneDG/CloneStep4Part2.png[,650]
@@ -704,10 +704,10 @@ image::clone/cloneDG/CloneStep4Part2.png[,650]
 image::clone/cloneDG/CloneStep4Part3.png[,650]
 
 ===== Execution observed by user
-The following activity diagram gives an overview of what the user observes when executing **clone** comnand
+The following activity diagram gives an overview of what the user observes when executing **clone** command:
 
 :figure-caption: Figure
-.Activity Diagram for execution of **clone** command
+.Activity diagram for execution of **clone** command
 image::clone/cloneDG/CloneActivityDiagram.png[]
 
 ==== Design considerations
