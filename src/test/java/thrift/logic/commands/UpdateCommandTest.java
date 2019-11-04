@@ -49,7 +49,7 @@ public class UpdateCommandTest {
 
         Model expectedModel = new ModelManager(new Thrift(model.getThrift()), new UserPrefs(),
                 new PastUndoableCommands());
-        expectedModel.setTransaction(model.getFilteredTransactionList().get(1), updatedExpense);
+        expectedModel.setTransactionWithIndex(Index.fromZeroBased(1), updatedExpense);
 
         assertCommandSuccess(updateCommand, model, expectedMessageUpdated + expectedMessageOriginal,
                 expectedModel);
@@ -71,7 +71,7 @@ public class UpdateCommandTest {
 
         Model expectedModel = new ModelManager(new Thrift(model.getThrift()), new UserPrefs(),
                 new PastUndoableCommands());
-        expectedModel.setTransaction(lastTransaction, updatedTransaction);
+        expectedModel.setTransactionWithIndex(indexLastTransaction, updatedTransaction);
 
         assertCommandSuccess(updateCommand, model, expectedMessageUpdated
                 + expectedMessageOriginal, expectedModel);
@@ -93,7 +93,7 @@ public class UpdateCommandTest {
 
         Model expectedModel = new ModelManager(new Thrift(model.getThrift()), new UserPrefs(),
                 new PastUndoableCommands());
-        expectedModel.setTransaction(model.getFilteredTransactionList().get(0), updatedPerson);
+        expectedModel.setTransactionWithIndex(Index.fromZeroBased(0), updatedPerson);
 
         assertCommandSuccess(updateCommand, model, expectedMessageUpdated
                 + expectedMessageOriginal, expectedModel);
