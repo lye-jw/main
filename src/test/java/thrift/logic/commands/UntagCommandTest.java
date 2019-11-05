@@ -1,6 +1,10 @@
 package thrift.logic.commands;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static thrift.logic.commands.CommandTestUtil.assertCommandFailure;
 import static thrift.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static thrift.logic.commands.CommandTestUtil.assertRedoCommandSuccess;
 import static thrift.logic.commands.CommandTestUtil.assertUndoCommandSuccess;
@@ -10,6 +14,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import thrift.commons.core.Messages;
 import thrift.commons.core.index.Index;
 import thrift.logic.commands.exceptions.CommandException;
 import thrift.model.Model;
@@ -91,7 +96,8 @@ class UntagCommandTest {
     void invalidIndexField_throwsCommandException() {
         Index index = Index.fromOneBased(model.getFilteredTransactionList().size() + 1);
         UntagCommand untagCommand = new UntagCommand(index, new TagSetBuilder().addTag("Test").build());
-        assertThrows(CommandException.class, () -> untagCommand.execute(model, null));
+
+        assertCommandFailure(untagCommand, model, Messages.MESSAGE_INVALID_TRANSACTION_DISPLAYED_INDEX);
     }
 
     @Test
@@ -103,7 +109,7 @@ class UntagCommandTest {
         Set<Tag> tagSet = new TagSetBuilder("Different", "Nothing").build();
         UntagCommand untagCommand = new UntagCommand(TypicalIndexes.INDEX_THIRD_TRANSACTION, tagSet);
 
-        assertThrows(CommandException.class, () -> untagCommand.execute(model, null));
+        assertCommandFailure(untagCommand, model, UntagCommand.MESSAGE_NO_DEL_TAGS);
     }
 
     @Test

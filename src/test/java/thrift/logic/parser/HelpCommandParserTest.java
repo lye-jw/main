@@ -10,6 +10,7 @@ import thrift.logic.commands.AddExpenseCommand;
 import thrift.logic.commands.AddIncomeCommand;
 import thrift.logic.commands.BudgetCommand;
 import thrift.logic.commands.CloneCommand;
+import thrift.logic.commands.ConvertCommand;
 import thrift.logic.commands.DeleteCommand;
 import thrift.logic.commands.ExitCommand;
 import thrift.logic.commands.FindCommand;
@@ -107,6 +108,12 @@ public class HelpCommandParserTest {
     public void parse_update_success() throws ParseException {
         assertParseSuccess(parser, UpdateCommand.COMMAND_WORD, new HelpCommand(
                 UpdateCommand.HELP_MESSAGE));
+    }
+
+    @Test
+    public void parse_convert_success() throws ParseException {
+        assertParseSuccess(parser, ConvertCommand.COMMAND_WORD, new HelpCommand(
+                ConvertCommand.HELP_MESSAGE));
     }
 
     @Test
