@@ -4,6 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static thrift.logic.commands.CommandTestUtil.assertCommandFailure;
 import static thrift.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static thrift.logic.commands.CommandTestUtil.assertRedoCommandSuccess;
 import static thrift.logic.commands.CommandTestUtil.assertUndoCommandSuccess;
@@ -13,6 +14,7 @@ import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
+import thrift.commons.core.Messages;
 import thrift.commons.core.index.Index;
 import thrift.logic.commands.exceptions.CommandException;
 import thrift.model.Model;
@@ -21,14 +23,18 @@ import thrift.model.PastUndoableCommands;
 import thrift.model.UserPrefs;
 import thrift.model.tag.Tag;
 import thrift.model.transaction.Expense;
+import thrift.model.transaction.Income;
 import thrift.model.transaction.Transaction;
 import thrift.testutil.ExpenseBuilder;
+import thrift.testutil.IncomeBuilder;
 import thrift.testutil.TagSetBuilder;
 import thrift.testutil.TypicalIndexes;
 import thrift.testutil.TypicalTransactions;
 
 class TagCommandTest {
 
+    private Model model = new ModelManager(TypicalTransactions.getTypicalThrift(), new UserPrefs(),
+            new PastUndoableCommands());
 
     @Test
     void execute_newTags_success() throws CommandException {
@@ -53,6 +59,59 @@ class TagCommandTest {
         assertNotEquals(updatedExpense.getTags(), model.getFilteredTransactionList().get(0).getTags()); //Before
         tagCommand.execute(model, null);
         assertEquals(updatedExpense.getTags(), model.getFilteredTransactionList().get(0).getTags()); //After
+    }
+
+    @Test
+    void execute_existingTagsPresent_success() throws CommandException {
+        Income originalIncome = new IncomeBuilder(model.getFilteredTransactionList().get(1))
+                .withTags("Test", "Tag").build();
+        model.setTransactionWithIndex(TypicalIndexes.INDEX_SECOND_TRANSACTION, originalIncome);
+
+        Set<Tag> tagSet = new TagSetBuilder("Test", "Freedom", "Yahoo").build();
+        TagCommand tagCommand = new TagCommand(TypicalIndexes.INDEX_SECOND_TRANSACTION, tagSet);
+
+        Set<Tag> expectedUpdatedTag = new TagSetBuilder("Freedom", "Tag", "Test", "Yahoo")
+                .build();
+        Income updatedIncome = new Income(
+                originalIncome.getDescription(),
+                originalIncome.getValue(),
+                originalIncome.getRemark(),
+                originalIncome.getDate(),
+                expectedUpdatedTag);
+
+        String taggedTransactionNotification = String.format(TagCommand.MESSAGE_TAG_TRANSACTION_SUCCESS,
+                updatedIncome);
+        String nonexistentTagsNotification = String.format(TagCommand.MESSAGE_TAG_EXISTED, "[Test]");
+        String originalTransactionNotification = String.format(UntagCommand.MESSAGE_ORIGINAL_TRANSACTION,
+                originalIncome);
+        String expectedMessage = taggedTransactionNotification + nonexistentTagsNotification
+                + originalTransactionNotification;
+
+        ModelManager expectedModel = new ModelManager(model.getThrift(), new UserPrefs(),
+                new PastUndoableCommands());
+        expectedModel.setTransactionWithIndex(TypicalIndexes.INDEX_SECOND_TRANSACTION, updatedIncome);
+
+        assertCommandSuccess(tagCommand, model, expectedMessage, expectedModel);
+    }
+
+    @Test
+    void invalidIndexField_throwsCommandException() {
+        Index index = Index.fromOneBased(model.getFilteredTransactionList().size() + 1);
+        TagCommand tagCommand = new TagCommand(index, new TagSetBuilder().addTag("Test").build());
+
+        assertCommandFailure(tagCommand, model, Messages.MESSAGE_INVALID_TRANSACTION_DISPLAYED_INDEX);
+    }
+
+    @Test
+    void noTagsAdded_throwsCommandException() {
+        Expense expense = new ExpenseBuilder(model.getFilteredTransactionList().get(0))
+                .withTags("Test", "Tag").build();
+        model.setTransactionWithIndex(TypicalIndexes.INDEX_THIRD_TRANSACTION, expense);
+
+        Set<Tag> tagSet = new TagSetBuilder("Test", "Tag").build();
+        TagCommand tagCommand = new TagCommand(TypicalIndexes.INDEX_THIRD_TRANSACTION, tagSet);
+
+        assertCommandFailure(tagCommand, model, TagCommand.MESSAGE_NO_NEW_TAGS);
     }
 
     @Test

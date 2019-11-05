@@ -9,7 +9,9 @@ import static thrift.testutil.Assert.assertThrows;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashSet;
 
@@ -121,6 +123,16 @@ public class ModelManagerTest {
     }
 
     @Test
+    public void setGetCurrentMonthYear() {
+        Calendar calendar = Calendar.getInstance();
+        modelManager.setCurrentMonthYear(calendar);
+
+        String expectedMonthYearString = new SimpleDateFormat("MMMM yyyy").format(calendar.getTime());
+        String retrivedMonthYear = modelManager.getCurrentMonthYear();
+        assertEquals(expectedMonthYearString, retrivedMonthYear);
+    }
+
+    @Test
     public void equals() {
         Thrift thrift = new ThriftBuilder().withTransaction(TypicalTransactions.LAKSA).build();
         Thrift differentThrift = new Thrift();
@@ -158,4 +170,5 @@ public class ModelManagerTest {
         differentUserPrefs.setThriftFilePath(Paths.get("differentFilePath"));
         assertFalse(modelManager.equals(new ModelManager(thrift, differentUserPrefs, pastUndoableCommands)));
     }
+
 }
