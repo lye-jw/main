@@ -117,6 +117,11 @@ public class HelpCommandParserTest {
     }
 
     @Test
+    public void parse_noArgument_success() throws ParseException {
+        assertParseSuccess(parser, HelpCommandParser.EMPTY_STRING, new HelpCommand(HelpCommandParser.EMPTY_STRING));
+    }
+
+    @Test
     public void parse_parseInvalidCommand_success() throws ParseException {
         assertParseFailure(parser, "abc", String.format(
                 String.format(Messages.MESSAGE_INVALID_COMMAND_FORMAT, HelpCommand.MESSAGE_USAGE)));

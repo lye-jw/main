@@ -7,11 +7,32 @@
     "date" : "20/10/2019",
     "tagged" : [ "Won", "Gamble" ]
   }, {
-    "type" : "income",
-    "description" : "Valid Transaction",
-    "value" : "500.00",
-    "remark" : "I can really stuff them in",
-    "date" : "28/10/2019",
-    "tagged" : [ "Award" ]
+    "type": "income",
+    "description": "Valid Transaction",
+    "value": "500.00",
+    "remark": "I can really stuff them in",
+    "date": "28/10/2019",
+    "tagged": [ "Award" ]
+  }, {
+    "type" : "expense",
+    "description" : "Netflix",
+    "value" : "10.98",
+    "remark" : "",
+    "date" : "30/10/2019",
+    "tagged" : [ "Entertainment" ]
+  }, {
+    "type" : "expense",
+    "description" : "Spotify",
+    "value" : "abc",
+    "remark" : "",
+    "date" : "30/10/2019",
+    "tagged" : [ ]
+  } ],
+  "budgets" : [ {
+    "period" : "10/2019",
+    "value" : "100.00"
+  }, {
+    "period" : "11/2019",
+    "value" : "100.00"
   } ]
 }
