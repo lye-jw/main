@@ -18,7 +18,7 @@ _User Experience Developer_, **Melvin Ang** was the _Software Architect_ and **K
 === 1.2. Project THRIFT
 My team morphed the address book application https://github.com/nus-cs2103-AY1920S1/addressbook-level3[AddressBook-Level3]
 into THRIFT, a desktop finance tracker application. THRIFT is meant for NUS students who wish to keep track of all their
-income and spending information to better control, manage and plan out their flow of money.
+income and expenditure information to better control, manage and plan out their flow of money.
 
 To that end, some of THRIFT's features include setting a monthly budget, adding and deleting income and expense-type
 entries, updating details of entries, tagging and untagging entries with categories, listing entries in a given month,
@@ -134,7 +134,7 @@ Here is an explanation for the `update` command:
 - `INDEX` refers to the index number currently shown in the displayed list, and must be a positive integer.
 
 * You can update any or all of the transaction's name, value, remark and tags fields. For information on
-these fields, see <<../UserGuide.adoc#TransactionDetailsTag, here>>.
+these fields, see https://deploy-preview-273--thrift.netlify.com/userguide#TransactionDetailsTag[here].
 
 * All fields are optional, but you must specify at least one field to be updated.
 
@@ -204,14 +204,14 @@ Here is a Class Diagram for the implementation of `**Occurrence**`:
 .Implementation of `**Occurrence**` class
 image::clone/cloneDG/OccurrenceClassDiagram.png[]
 
-The *clone* functionality is facilitated by common <<../DeveloperGuide.adoc#Design-Logic, *Logic*>> operations and classes for commands, with
+The *clone* functionality is facilitated by common https://deploy-preview-273--thrift.netlify.com/developerguide#Design-Logic[*Logic*] operations and classes for commands, with
 feature-specific classes `**CloneCommand**` in place of `**Command**`, and `**CloneCommandParser**`.
 The following methods are concrete implementations unique to **clone**:
 
 * `CloneCommandParser#parse()` - Parses user input to extract an `**Index**` and create an `**Occurrence**`, then passes
 them as parameters to a new `**CloneCommand**` for execution.
 * `CloneCommand#execute()` - Adds one or more identical copies of specified `**Transaction**` to `**Model**`, then
-returns a `**CommandResult**` (<<Design-Logic, Step 4 of Logic>>).
+returns a `**CommandResult**` (https://deploy-preview-273--thrift.netlify.com/developerguide#Design-Logic[Step 4 of Logic]).
 
 The following Sequence Diagram illustrates **clone** command execution:
 

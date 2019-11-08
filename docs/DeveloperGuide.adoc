@@ -1001,6 +1001,31 @@ Regardless of what is eventually chosen, the user experience will be improved by
 
 //end::ai[]
 
+// tag::report[]
+
+=== [Proposed] External report generation
+We plan to increase the practicality of THRIFT by enabling the user to generate an external report document that they
+can keep for recording purposes. This proposed report will clearly display the user's income, expenditure and budget
+information on a monthly basis. The user can also choose whether to include all transactions in the month or only
+transactions in certain Tag categories in the report.
+
+==== Proposed implementation
+To execute report generation, we propose a new `**ReportCommand**` that is a subclass of `**NonScrollingCommand**` and
+works with `**ModelManager**` like other commands as described in the <<Design-Logic, Logic>> section. The following
+diagram shows the dependency between `**ReportCommand**` and `**ModelManager**`:
+
+image::report/ReportClassDiagram.png[]
+
+`ReportCommand#execute()` will retrieve information needed from the existing transactions list through
+`**ModelManager**` retrieval operations, process them and generate an external report document using Java APIs.
+
+The current formats we have in mind for report documents and the relevant Java APIs to handle them are:
+
+* Comma-Separated Values (CSV) with http://opencsv.sourceforge.net/apidocs/com/opencsv/CSVWriter.html[OpenCSV] API.
+* Portable Document Format (PDF) with https://api.itextpdf.com/iText7/java/7.1.8/[PDFWriter] API.
+
+// end::report[]
+
 === Logging
 
 We are using `**java.util.logging**` package for logging. The `**LogsCenter**` class is used to manage the logging levels and logging destinations:
