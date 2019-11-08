@@ -24,7 +24,7 @@ To that end, some of THRIFT's features include setting a monthly budget, adding 
 entries, updating details of entries, tagging and untagging entries with categories, listing entries in a given month,
 creating copies of entries across periods of occurrence and converting currencies.
 
-As part of the requirements for CS2103T, THRIFT has a simple and intuitive Command Line Interface - everything you want
+As part of the requirements for CS2103T, THRIFT has an  intuitive Command Line Interface - everything you want
 to do is executed by typing a command in the Command Box indicated in Figure 1 below. The following image shows what
 THRIFT looks like:
 
@@ -33,7 +33,7 @@ image::UGUI.png[,700]
 
 [[PPPFormattingTag]]
 === 1.3 Text formatting in this portfolio
-The <<UGTag, Contributions to the User Guide>> and <<DGTag, Contributions to the Developer Guide>> sections use these
+The "<<UGTag, Contributions to the User Guide>>" and "<<DGTag, Contributions to the Developer Guide>>" sections use these
 formatting styles for text that have special meaning:
 
 NOTE: This symbol indicates information that you may want to take note of at certain points in the guide.
@@ -77,10 +77,11 @@ find the modified transaction.
 `ScrollingCommand` make the user interface scroll to the modified transaction in the list after command execution.
 
 === 2.3. Code contributed
-Here are links to the code contributed by me: +
+Here are links to the code and solutions contributed by me: +
 https://nus-cs2103-ay1920s1.github.io/tp-dashboard/#search=lye-jw&sort=groupTitle&sortWithin=title&since=2019-09-06&timeframe=commit&mergegroup=false&groupSelect=groupByRepos&breakdown=false&tabOpen=true&tabType=authorship&tabAuthor=lye-jw&tabRepo=AY1920S1-CS2103T-W12-2%2Fmain%5Bmaster%5D[All code contributed] |
-https://nus-cs2103-ay1920s1.github.io/tp-dashboard/#search=lye-jw&sort=groupTitle&sortWithin=title&since=2019-09-06&timeframe=commit&mergegroup=false&groupSelect=groupByRepos&breakdown=false&tabOpen=true&tabType=authorship&tabAuthor=lye-jw&tabRepo=AY1920S1-CS2103T-W12-2%2Fmain%5Bmaster%5D[Functional code] |
-https://nus-cs2103-ay1920s1.github.io/tp-dashboard/#search=lye-jw&sort=groupTitle&sortWithin=title&since=2019-09-06&timeframe=commit&mergegroup=false&groupSelect=groupByRepos&breakdown=false&tabOpen=true&tabType=authorship&tabAuthor=lye-jw&tabRepo=AY1920S1-CS2103T-W12-2%2Fmain%5Bmaster%5D[Test code]
+https://github.com/AY1920S1-CS2103T-W12-2/main/pulls?utf8=%E2%9C%93&q=is%3Apr+author%3Alye-jw+is%3Amerged+[Pull Requests] |
+https://github.com/AY1920S1-CS2103T-W12-2/main/issues?utf8=%E2%9C%93&q=assignee%3Alye-jw+is%3Aclosed+[Issues assigned] |
+https://github.com/AY1920S1-CS2103T-W12-2/main/commits/master?author=lye-jw[Commits]
 
 === 2.4. Other contributions
 * Project management:
@@ -102,8 +103,8 @@ https://github.com/AY1920S1-CS2103T-W12-2/main/pull/78/files[#78] https://github
 https://github.com/AY1920S1-CS2103T-W12-2/main/pull/212[#212] https://github.com/AY1920S1-CS2103T-W12-2/main/pull/206[#206] https://github.com/AY1920S1-CS2103T-W12-2/main/pull/101[#101]
 ** I engaged in discussions with teammates to decide how best to implement features (Pull Request https://github.com/AY1920S1-CS2103T-W12-2/main/pull/211[#211])
 ** The Scrolling Commands ability I implemented was adopted in some of my teammates' features (Pull Requests
-https://github.com/AY1920S1-CS2103T-W12-2/main/pull/205/files[#205] https://github.com/AY1920S1-CS2103T-W12-2/main/pull/195/files[#195]
-https://github.com/AY1920S1-CS2103T-W12-2/main/pull/165/files[#165])
+https://github.com/AY1920S1-CS2103T-W12-2/main/pull/205[#205] https://github.com/AY1920S1-CS2103T-W12-2/main/pull/195[#195]
+https://github.com/AY1920S1-CS2103T-W12-2/main/pull/165[#165])
 
 [[UGTag]]
 == 3. Contributions to the User Guide
@@ -134,7 +135,7 @@ Here is an explanation for the `update` command:
 - `INDEX` refers to the index number currently shown in the displayed list, and must be a positive integer.
 
 * You can update any or all of the transaction's name, value, remark and tags fields. For information on
-these fields, see https://deploy-preview-273--thrift.netlify.com/userguide#TransactionDetailsTag[here].
+these fields, see https://ay1920s1-cs2103t-w12-2.github.io/main/UserGuide.html#TransactionDetailsTag[here].
 
 * All fields are optional, but you must specify at least one field to be updated.
 
@@ -160,18 +161,18 @@ image::update/updateUG/UpdateStep2.png[,500]
 . You should see that the "Curry Laksa" transaction's name is updated to "Laksa". The status message also tells you what
 the original transaction was.
 +
-image::update/updateUG/UpdateStep3.png[,500]
+image::update/updateUG/UpdateStep3.png[,600]
 +
-. Later on, you want to change the name and value, as well as add a remark and tag. You type: +
+. Later on, you want to change the name and value, as well as add a remark and tag. In the Command Box, you type: +
 **update i/2 n/Asam Laksa v/12 r/My first time trying! t/Food t/Lunch** +
 and press kbd:[Enter].
 +
-image::update/updateUG/UpdateStep4.png[,500]
+image::update/updateUG/UpdateStep4.png[,600]
 +
 . You can see the updated details of the transaction at index 2. The status message tells you what the original
 transaction was. The transaction month's Expense and Balance trackers are also updated.
 +
-image::update/updateUG/UpdateStep5.png[,500]
+image::update/updateUG/UpdateStep5.png[,600]
 
 ----------_{End of extract from User Guide}_----------
 
@@ -204,16 +205,16 @@ Here is a Class Diagram for the implementation of `**Occurrence**`:
 .Implementation of `**Occurrence**` class
 image::clone/cloneDG/OccurrenceClassDiagram.png[]
 
-The *clone* functionality is facilitated by common https://deploy-preview-273--thrift.netlify.com/developerguide#Design-Logic[*Logic*] operations and classes for commands, with
+The *clone* functionality is facilitated by common https://ay1920s1-cs2103t-w12-2.github.io/main/DeveloperGuide.html#Design-Logic[*Logic*] operations and classes for commands, with
 feature-specific classes `**CloneCommand**` in place of `**Command**`, and `**CloneCommandParser**`.
 The following methods are concrete implementations unique to **clone**:
 
 * `CloneCommandParser#parse()` - Parses user input to extract an `**Index**` and create an `**Occurrence**`, then passes
 them as parameters to a new `**CloneCommand**` for execution.
 * `CloneCommand#execute()` - Adds one or more identical copies of specified `**Transaction**` to `**Model**`, then
-returns a `**CommandResult**` (https://deploy-preview-273--thrift.netlify.com/developerguide#Design-Logic[Step 4 of Logic]).
+returns a `**CommandResult**` (https://ay1920s1-cs2103t-w12-2.github.io/main/DeveloperGuide.html#Design-Logic[Step 4 of Logic]).
 
-The following Sequence Diagram illustrates **clone** command execution:
+The following sequence diagram illustrates **clone** command execution:
 
 .Sequence diagram for **clone** execution with 12 occurrences on an `**Expense**`
 image::clone/cloneDG/CloneSequenceDiagram.png[]

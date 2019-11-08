@@ -698,7 +698,7 @@ them as parameters to a new `**CloneCommand**` for execution.
 * `CloneCommand#execute()` - Adds one or more identical copies of specified `**Transaction**` to `**Model**`, then
 returns a `**CommandResult**` (<<Design-Logic, Step 4 of Logic>>).
 
-The following Sequence Diagram illustrates **clone** command execution:
+The following sequence diagram illustrates **clone** command execution:
 
 .Sequence diagram for **clone** execution with 12 occurrences on an `**Expense**`
 image::clone/cloneDG/CloneSequenceDiagram.png[]
